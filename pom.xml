@@ -12,6 +12,7 @@
         <module>user</module>
         <module>tool</module>
         <module>generator</module>
+        <module>gateway</module>
     </modules>
 
 
@@ -43,6 +44,12 @@
                 <version>2.2.0.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>3.1.0</version>
             </dependency>
 
             <dependency>

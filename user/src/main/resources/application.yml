@@ -40,31 +40,31 @@ spring:
         cacheServerConfiguration: true # 缓存VARIABLES，COLLATION
         elideSetAutoCommits: true # 不进行 set autocommit
         maintainTimeStats: true # 更详细的错误信息，会多2次System.getCurrentTimeMillis()调用
-#  redis:
-#    host: 47.107.97.99
-#    port: 6379
-#    password: 0B_#8V$!VWAKGXJ1
-#    database: 0
-#    jedis:
-#      pool:
-#        max-active: 1000
-#        max-idle: 100
-#        max-wait: -1ms
-#        min-idle: 10
-#    timeout: 3000ms
-#  rabbitmq:
-#    host: 47.107.97.99
-#    port: 5672
-#    username: root
-#    password: EO7*NUG3_(ZA_E$&
-#    virtual-host: /
-#    publisher-confirm-type: correlated # 开启发送确认
-#    publisher-returns: true       # 开启发送失败退回
-#    listener:                     # 开启ACK
-#      direct:
-#        acknowledge-mode: manual
-#      simple:
-#        acknowledge-mode: manual
+  redis:
+    host: 47.107.97.99
+    port: 6379
+    password: 0B_#8V$!VWAKGXJ1
+    database: 0
+    jedis:
+      pool:
+        max-active: 1000
+        max-idle: 100
+        max-wait: -1ms
+        min-idle: 10
+    timeout: 3000ms
+  rabbitmq:
+    host: 47.107.97.99
+    port: 5672
+    username: root
+    password: EO7*NUG3_(ZA_E$&
+    virtual-host: /
+    publisher-confirm-type: correlated # 开启发送确认
+    publisher-returns: true       # 开启发送失败退回
+    listener:                     # 开启ACK
+      direct:
+        acknowledge-mode: manual
+      simple:
+        acknowledge-mode: manual
 #  elasticsearch:
 #    rest:
 #      uris: 47.107.97.99:9200

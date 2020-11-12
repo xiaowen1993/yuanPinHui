@@ -95,17 +95,17 @@ public class UserEntity implements Serializable {
     /**
      * 生命源
      */
-    private Long shoppingGold;
+    private Long lifeSource;
 
     /**
      * 能量源
      */
-    private Long integral;
+    private Long energySource;
 
     /**
      * 币
      */
-    private Long spellBean;
+    private Long bean;
 
     /**
      * 关系
@@ -116,6 +116,12 @@ public class UserEntity implements Serializable {
      * 银行卡
      */
     private String bankCard;
+
+    private Long freezeLifeSource;
+
+    private Long freezeEnergySource;
+
+    private Long freezeBean;
 
     public Integer getUserId() {
         return userId;
@@ -237,30 +243,31 @@ public class UserEntity implements Serializable {
         this.topRefereeId = topRefereeId;
         return this;
     }
-    public Long getShoppingGold() {
-        return shoppingGold;
+
+    public Long getLifeSource() {
+        return lifeSource;
     }
 
-    public UserEntity setShoppingGold(Long shoppingGold) {
-        this.shoppingGold = shoppingGold;
-        return this;
-    }
-    public Long getIntegral() {
-        return integral;
+    public void setLifeSource(Long lifeSource) {
+        this.lifeSource = lifeSource;
     }
 
-    public UserEntity setIntegral(Long integral) {
-        this.integral = integral;
-        return this;
-    }
-    public Long getSpellBean() {
-        return spellBean;
+    public Long getEnergySource() {
+        return energySource;
     }
 
-    public UserEntity setSpellBean(Long spellBean) {
-        this.spellBean = spellBean;
-        return this;
+    public void setEnergySource(Long energySource) {
+        this.energySource = energySource;
     }
+
+    public Long getBean() {
+        return bean;
+    }
+
+    public void setBean(Long bean) {
+        this.bean = bean;
+    }
+
     public String getRelation() {
         return relation;
     }
@@ -278,29 +285,27 @@ public class UserEntity implements Serializable {
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "UserEntity{" +
-            "userId=" + userId +
-            ", userPassword=" + userPassword +
-            ", userLastLoginTime=" + userLastLoginTime +
-            ", userLevel=" + userLevel +
-            ", userNickname=" + userNickname +
-            ", userMobile=" + userMobile +
-            ", userAvatar=" + userAvatar +
-            ", userStatus=" + userStatus +
-            ", userReferrer=" + userReferrer +
-            ", addTime=" + addTime +
-            ", updateTime=" + updateTime +
-            ", goupSize=" + goupSize +
-            ", underlingSize=" + underlingSize +
-            ", indirectSize=" + indirectSize +
-            ", topRefereeId=" + topRefereeId +
-            ", shoppingGold=" + shoppingGold +
-            ", integral=" + integral +
-            ", spellBean=" + spellBean +
-            ", relation=" + relation +
-            ", bankCard=" + bankCard +
-        "}";
+    public Long getFreezeLifeSource() {
+        return freezeLifeSource;
+    }
+
+    public void setFreezeLifeSource(Long freezeLifeSource) {
+        this.freezeLifeSource = freezeLifeSource;
+    }
+
+    public Long getFreezeEnergySource() {
+        return freezeEnergySource;
+    }
+
+    public void setFreezeEnergySource(Long freezeEnergySource) {
+        this.freezeEnergySource = freezeEnergySource;
+    }
+
+    public Long getFreezeBean() {
+        return freezeBean;
+    }
+
+    public void setFreezeBean(Long freezeBean) {
+        this.freezeBean = freezeBean;
     }
 }

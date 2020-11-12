@@ -1,5 +1,6 @@
-package com.yph.modules.user.execute;
+package com.yph.modules.user.execute.impl;
 
+import com.yph.modules.user.execute.LifeSourceExecute;
 import org.springframework.stereotype.Component;
 
 /**
