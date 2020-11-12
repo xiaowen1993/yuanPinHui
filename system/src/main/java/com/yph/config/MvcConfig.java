@@ -1,4 +1,4 @@
-package com.system.config;
+package com.yph.config;
 
 
 import com.yph.resolvers.PmapResolver;

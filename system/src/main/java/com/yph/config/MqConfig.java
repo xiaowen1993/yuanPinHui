@@ -1,4 +1,4 @@
-package com.system.config;
+package com.yph.config;
 
 
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
