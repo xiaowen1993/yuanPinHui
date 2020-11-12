@@ -1,5 +1,6 @@
 package com.yph.config;
 
+
 import com.yph.resolvers.PmapResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,9 +10,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import java.util.List;
 
-/**
- * @author Agu
- */
 @Configuration
 public class MvcConfig extends WebMvcConfigurerAdapter {
 
@@ -26,6 +24,15 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         return new PmapResolver();
     }
 
+
+//    /**
+//     * 添加拦截器
+//     */
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        //拦截路径可自行配置多个 可用 ，分隔开
+//        registry.addInterceptor(new JwtInterceptor()).addPathPatterns("/**");
+//    }
 
 
 }

@@ -2,6 +2,8 @@ package com.yph.modules.user.service;
 
 import com.yph.modules.user.entity.UserEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yph.util.P;
+import com.yph.util.R;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IUserService extends IService<UserEntity> {
 
+    R userRegister(P p) throws Exception;
 }
