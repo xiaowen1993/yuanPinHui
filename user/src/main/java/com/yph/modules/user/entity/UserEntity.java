@@ -117,10 +117,17 @@ public class UserEntity implements Serializable {
      */
     private String bankCard;
 
+    /**
+     * 冻结生命源
+     */
     private Long freezeLifeSource;
-
+    /**
+     * 冻结能量源
+     */
     private Long freezeEnergySource;
-
+    /**
+     * 冻结币
+     */
     private Long freezeBean;
 
     public Integer getUserId() {
