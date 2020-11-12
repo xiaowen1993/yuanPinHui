@@ -1,10 +1,6 @@
 package com.yph.util;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author  nachuan
