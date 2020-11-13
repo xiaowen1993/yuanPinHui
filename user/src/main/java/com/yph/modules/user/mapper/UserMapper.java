@@ -3,6 +3,8 @@ package com.yph.modules.user.mapper;
 import com.yph.modules.user.entity.UserEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户表 Mapper 接口
@@ -14,4 +16,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface UserMapper extends BaseMapper<UserEntity> {
 
     String selectUserById(Integer userId);
+
+    List<UserEntity> selectUserByReferrer(String upgrade4Id);
+
 }

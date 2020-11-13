@@ -5,4 +5,7 @@
     <select id="selectUserById" resultType="java.lang.String">
         select relation from `user` where user_id=#{userId}
     </select>
+    <select id="selectUserByReferrer" resultType="com.yph.modules.user.entity.UserEntity">
+        select * from `user` where user_referrer=#{upgrade4Id}
+    </select>
 </mapper>

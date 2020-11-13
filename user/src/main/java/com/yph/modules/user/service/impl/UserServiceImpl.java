@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -42,30 +39,376 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
 
 
-    //用户等级升级
+    //用户等级升级  降级
     public void userUpgrade(){
-        List<UserEntity> list1=new ArrayList<>();
-        List<UserEntity> list2=new ArrayList<>();
-        List<UserEntity> list3=new ArrayList<>();
+        List<Integer> list1=new ArrayList<>();
+        List<Integer> list2=new ArrayList<>();
+        List<Integer> list3=new ArrayList<>();
+        List<Integer> list4=new ArrayList<>();
+        List<Integer> list5=new ArrayList<>();
+        List<Integer> list6=new ArrayList<>();
+
+        List<UserEntity> userEntities3=new ArrayList<>();
+        List<UserEntity> userEntities4=new ArrayList<>();
+        List<UserEntity> userEntities5=new ArrayList<>();
+        List<UserEntity> userEntities6=new ArrayList<>();
+
+        List<UserEntity> demotion1=new ArrayList<>();
+
         QueryWrapper<UserEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.ge("sum_team_energy_source",20000000);
         List<UserEntity> userEntities = userMapper.selectList(queryWrapper);
+        //判断升级的用户
         for (UserEntity userEntity : userEntities) {
             if(userEntity.getUserLevel()==0&&userEntity.getSumTeamEnergySource()>=20000000){
-                list1.add(userEntity);
+                list1.add(userEntity.getUserId());
             }else if(userEntity.getUserLevel()==1&&userEntity.getSumTeamEnergySource()>=50000000){
-                list2.add(userEntity);
+                list2.add(userEntity.getUserId());
             }else if(userEntity.getUserLevel()==2&&userEntity.getSumTeamEnergySource()>=200000000){
-                list3.add(userEntity);
-            }else if(userEntity.getUserLevel()==3&&userEntity.getSumTeamEnergySource()>=200000000){
-                list3.add(userEntity);
-            }else if(userEntity.getUserLevel()==4&&userEntity.getSumTeamEnergySource()>=200000000){
-                list3.add(userEntity);
-            }else if(userEntity.getUserLevel()==5&&userEntity.getSumTeamEnergySource()>=200000000){
-                list3.add(userEntity);
+                list3.add(userEntity.getUserId());
+                userEntities3.add(userEntity);
+            }else if(userEntity.getUserLevel()==3&&userEntity.getSumTeamEnergySource()>=500000000){
+                list4.add(userEntity.getUserId());
+                userEntities4.add(userEntity);
+            }else if(userEntity.getUserLevel()==4&&userEntity.getSumTeamEnergySource()>=1500000000){
+                list5.add(userEntity.getUserId());
+                userEntities5.add(userEntity);
+            }else if(userEntity.getUserLevel()==5&&userEntity.getSumTeamEnergySource()>=5000000000L){
+                list6.add(userEntity.getUserId());
+                userEntities6.add(userEntity);
+            }else{
+                demotion1.add(userEntity);   //业绩降级的
+            }
+        }
+
+
+        List<UserEntity> demotion2=new ArrayList<>();
+        List<UserEntity> demotion3=new ArrayList<>();
+        List<UserEntity> demotion4=new ArrayList<>();
+        List<UserEntity> demotion5=new ArrayList<>();
+
+        //判断降级的用户
+        if(demotion1.size()>0){
+            for (UserEntity userEntity : demotion1) {
+                if(userEntity.getSumTeamEnergySource()>=20000000&&userEntity.getSumTeamEnergySource()<50000000){
+                   list1.add(userEntity.getUserId());
+                }else if(userEntity.getSumTeamEnergySource()>=50000000&&userEntity.getSumTeamEnergySource()<200000000&&userEntity.getUserLevel()==3){
+                    list2.add(userEntity.getUserId());
+                    demotion2.add(userEntity);
+                }else if(userEntity.getSumTeamEnergySource()>=200000000&&userEntity.getSumTeamEnergySource()<500000000&&userEntity.getUserLevel()==4){
+                    demotion3.add(userEntity);
+                }else if(userEntity.getSumTeamEnergySource()>=500000000&&userEntity.getSumTeamEnergySource()<1500000000&&userEntity.getUserLevel()==5){
+                    demotion4.add(userEntity);
+                }else if(userEntity.getSumTeamEnergySource()>=1500000000&&userEntity.getSumTeamEnergySource()<5000000000L&&userEntity.getUserLevel()==6){
+                    demotion5.add(userEntity);
+                }
+            }
+        }
+
+        //将<20000000业绩的  改为普通用户
+        UpdateWrapper<UserEntity> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.set("user_level",0);
+        updateWrapper.le("sum_team_energy_source",20000000);
+        this.update(updateWrapper);
+
+        if(list1.size()>0){
+            UpdateWrapper<UserEntity> updateWrapper1=new UpdateWrapper<>();
+            updateWrapper1.set("user_level",1);
+            updateWrapper1.in("user_id",list1);
+            this.update(updateWrapper1);
+        }
+
+
+        if(list2.size()>0){
+            UpdateWrapper<UserEntity> updateWrapper2=new UpdateWrapper<>();
+            updateWrapper2.set("user_level",2);
+            updateWrapper2.in("user_id",list2);
+            this.update(updateWrapper2);
+        }
+
+        if(list3.size()>0){
+            UpdateWrapper<UserEntity> updateWrapper3=new UpdateWrapper<>();
+            updateWrapper3.set("user_level",3);
+            updateWrapper3.in("user_id",list3);
+            this.update(updateWrapper3);
+        }
+
+        //升级了3星的用户，往上查找，看上面是否有人可以升级了
+        List<String> upgrade4Ids=new ArrayList<>();  //业绩达到可以升级为4星的用户
+        for (UserEntity userEntity : userEntities3) {
+            String relation = userEntity.getRelation();
+            String[] split = relation.split(",");
+            for (String s : split) {
+                if (list4.contains(s))   //看可以升级4星的用户集合里面包含了此用户没有，没有包含的话 说明他业绩不够
+                    upgrade4Ids.add(s);
+            }
+        }
+
+        for (String upgrade4Id : upgrade4Ids) {
+            List<UserEntity> entityList=userMapper.selectUserByReferrer(upgrade4Id);
+            int count=0;
+            if(entityList!=null&&entityList.size()>=2){
+                for (UserEntity userEntity : entityList) {
+                    Boolean aBoolean = selectBottomUser(userEntity,3);
+                    if(aBoolean){
+                        count++;
+                    }
+                }
+            }
+            if(count>=2){
+                updateUserRank(upgrade4Id,4);
+                //升了4星  看上面的人  能不能升级
+                UserEntity userEntity1 = userMapper.selectById(upgrade4Id);
+                //现在是4星的用户  可能会升为5星的用户（业绩达到了  现在下面有用户升了4星用户）
+                List<String> upgrade5Ids=new ArrayList<>();
+                String relation = userEntity1.getRelation();
+                String[] split = relation.split(",");
+                for (String s : split) {
+                    if (list5.contains(s))
+                        upgrade5Ids.add(s);
+                }
+                for (String upgrade5Id : upgrade5Ids) {
+                    List<UserEntity> entityList2=userMapper.selectUserByReferrer(upgrade5Id);
+                    int count2=0;
+                    if(entityList2!=null&&entityList2.size()>=2){
+                        for (UserEntity userEntity : entityList2) {
+                            Boolean aBoolean = selectBottomUser(userEntity,4);
+                            if(aBoolean){
+                                count2++;
+                            }
+                        }
+                    }
+                    if(count2>=2){
+                        //升级5星，看上面的人  能否升6星
+                        updateUserRank(upgrade5Id,5);
+                        //升了4星  看上面的人  能不能升级
+                        UserEntity userEntity3 = userMapper.selectById(upgrade5Id);
+                        //现在是4星的用户  可能会升为5星的用户（业绩达到了  现在下面有用户升了4星用户）
+                        List<String> upgrade6Ids=new ArrayList<>();
+                        String relation3 = userEntity3.getRelation();
+                        String[] split3 = relation3.split(",");
+                        for (String s : split3) {
+                            if (list6.contains(s))
+                                upgrade6Ids.add(s);
+                        }
+                        for (String upgrade6Id : upgrade6Ids) {
+                            List<UserEntity> entityList3=userMapper.selectUserByReferrer(upgrade6Id);
+                            int count3=0;
+                            if(entityList3!=null&&entityList3.size()>=3){
+                                for (UserEntity userEntity : entityList3) {
+                                    Boolean aBoolean = selectBottomUser(userEntity,5);
+                                    if(aBoolean){
+                                        count2++;
+                                    }
+                                }
+                            }
+                            if(count3>=3){
+                                updateUserRank(upgrade5Id,6);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //从3星降级成2星
+        List<String> demotion2Ids=new ArrayList<>();
+        for (UserEntity userEntity : demotion2) {
+            String relation = userEntity.getRelation();
+            String[] split = relation.split(",");
+            QueryWrapper<UserEntity> queryWrapper1=new QueryWrapper<>();
+            queryWrapper1.eq("user_level",4);
+            queryWrapper1.in("user_id", Arrays.asList(split));
+            List<UserEntity> userEntities1 = userMapper.selectList(queryWrapper1);
+            for (UserEntity entity : userEntities1) {
+                demotion2Ids.add(entity.getUserId()+"");
+            }
+        }
+        for (String demotion2Id : demotion2Ids) {
+            List<UserEntity> entityList=userMapper.selectUserByReferrer(demotion2Id);
+            int count=0;
+            for (UserEntity userEntity : entityList) {
+                Boolean aBoolean = selectBottomUser(userEntity,3);
+                if(aBoolean){
+                    count++;
+                }
+            }
+            if(count<2){
+                updateUserRank(demotion2Id,3);
+                //4星降成了3级
+                UserEntity userEntity1 = userMapper.selectById(demotion2Id);
+
+                List<String> upgrade5Ids=new ArrayList<>();
+                String relation = userEntity1.getRelation();
+                String[] split = relation.split(",");
+                QueryWrapper<UserEntity> queryWrapper1=new QueryWrapper<>();
+                queryWrapper1.eq("user_level",5);
+                queryWrapper1.in("user_id", Arrays.asList(split));
+                List<UserEntity> userEntities1 = userMapper.selectList(queryWrapper1);
+                for (UserEntity entity : userEntities1) {
+                    upgrade5Ids.add(entity.getUserId()+"");
+                }
+
+                for (String upgrade5Id : upgrade5Ids) {
+                    List<UserEntity> entityList2=userMapper.selectUserByReferrer(upgrade5Id);
+                    int count2=0;
+                    for (UserEntity userEntity : entityList2) {
+                        Boolean aBoolean = selectBottomUser(userEntity,4);
+                        if(aBoolean){
+                            count2++;
+                        }
+                    }
+                    if(count2<2){
+                        updateUserRank(upgrade5Id,4);
+                        UserEntity userEntity3 = userMapper.selectById(upgrade5Id);
+                        List<String> upgrade6Ids=new ArrayList<>();
+                        String relation3 = userEntity3.getRelation();
+                        String[] split3 = relation3.split(",");
+                        QueryWrapper<UserEntity> queryWrapper4=new QueryWrapper<>();
+                        queryWrapper4.eq("user_level",6);
+                        queryWrapper4.in("user_id", Arrays.asList(split3));
+                        List<UserEntity> userEntities2 = userMapper.selectList(queryWrapper4);
+                        for (UserEntity entity : userEntities2) {
+                            upgrade6Ids.add(entity.getUserId()+"");
+                        }
+                        for (String upgrade6Id : upgrade6Ids) {
+                            List<UserEntity> entityList3=userMapper.selectUserByReferrer(upgrade6Id);
+                            int count3=0;
+                            for (UserEntity userEntity : entityList3) {
+                                Boolean aBoolean = selectBottomUser(userEntity,5);
+                                if(aBoolean){
+                                    count2++;
+                                }
+                            }
+                            if(count3<3){
+                                updateUserRank(upgrade5Id,5);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        //从4星降成了3星
+        List<String> demotion3Ids=new ArrayList<>();
+        for (UserEntity userEntity : demotion3) {
+            String relation = userEntity.getRelation();
+            String[] split = relation.split(",");
+            QueryWrapper<UserEntity> queryWrapper1=new QueryWrapper<>();
+            queryWrapper1.eq("user_level",5);
+            queryWrapper1.in("user_id", Arrays.asList(split));
+            List<UserEntity> userEntities1 = userMapper.selectList(queryWrapper1);
+            for (UserEntity entity : userEntities1) {
+                demotion3Ids.add(entity.getUserId()+"");
+            }
+        }
+        for (String demotion2Id : demotion3Ids) {
+            List<UserEntity> entityList=userMapper.selectUserByReferrer(demotion2Id);
+            int count=0;
+            for (UserEntity userEntity : entityList) {
+                Boolean aBoolean = selectBottomUser(userEntity,4);
+                if(aBoolean){
+                    count++;
+                }
+            }
+            if(count<2){
+                updateUserRank(demotion2Id,4);
+                //5星降成了4级
+                UserEntity userEntity1 = userMapper.selectById(demotion2Id);
+
+                List<String> upgrade5Ids=new ArrayList<>();
+                String relation = userEntity1.getRelation();
+                String[] split = relation.split(",");
+                QueryWrapper<UserEntity> queryWrapper1=new QueryWrapper<>();
+                queryWrapper1.eq("user_level",6);
+                queryWrapper1.in("user_id", Arrays.asList(split));
+                List<UserEntity> userEntities1 = userMapper.selectList(queryWrapper1);
+                for (UserEntity entity : userEntities1) {
+                    upgrade5Ids.add(entity.getUserId()+"");
+                }
+                for (String upgrade5Id : upgrade5Ids) {
+                    List<UserEntity> entityList2=userMapper.selectUserByReferrer(upgrade5Id);
+                    int count2=0;
+                    for (UserEntity userEntity : entityList2) {
+                        Boolean aBoolean = selectBottomUser(userEntity,5);
+                        if(aBoolean){
+                            count2++;
+                        }
+                    }
+                    if(count2<3){
+                        updateUserRank(upgrade5Id,5);
+                    }
+                }
+            }
+        }
+
+
+        //从5星降成了4星
+        List<String> demotion4Ids=new ArrayList<>();
+        for (UserEntity userEntity : demotion4) {
+            String relation = userEntity.getRelation();
+            String[] split = relation.split(",");
+            QueryWrapper<UserEntity> queryWrapper1=new QueryWrapper<>();
+            queryWrapper1.eq("user_level",6);
+            queryWrapper1.in("user_id", Arrays.asList(split));
+            List<UserEntity> userEntities1 = userMapper.selectList(queryWrapper1);
+            for (UserEntity entity : userEntities1) {
+                demotion4Ids.add(entity.getUserId()+"");
+            }
+        }
+        for (String demotion2Id : demotion4Ids) {
+            List<UserEntity> entityList=userMapper.selectUserByReferrer(demotion2Id);
+            int count=0;
+            for (UserEntity userEntity : entityList) {
+                Boolean aBoolean = selectBottomUser(userEntity,5);
+                if(aBoolean){
+                    count++;
+                }
+            }
+            if(count<3) {
+                updateUserRank(demotion2Id, 5);
             }
         }
     }
+
+
+    //修改用户等级
+    private Boolean updateUserRank(String userId,Integer rank){
+        UpdateWrapper<UserEntity> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.set("user_level",rank);
+        updateWrapper.eq("user_id",userId);
+        return update(updateWrapper);
+    }
+
+
+    //根据会员ID  查询下面是否有 xx 星以上的用户
+    private Boolean selectBottomUser(UserEntity userEntity,Integer userLevel){
+        List<UserEntity> list=new ArrayList<>();
+        recursionSelectUser(userEntity,list,userLevel);
+        return list.size()>0 ? true : false;
+    }
+
+
+    private void recursionSelectUser(UserEntity userEntity,List<UserEntity> list,Integer userLevel){
+        List<UserEntity> userEntities = userMapper.selectUserByReferrer(userEntity.getUserId() + "");
+        boolean temp=false;
+        for (UserEntity entity : userEntities) {
+            if(entity.getUserLevel()>=userLevel){
+                list.add(entity);
+                temp=true;
+                break;
+            }
+        }
+        if(temp){
+            for (UserEntity entity : userEntities) {
+                recursionSelectUser(entity,list,userLevel);
+            }
+        }
+    }
+
+
 
     //累加团队业绩
     @Override
