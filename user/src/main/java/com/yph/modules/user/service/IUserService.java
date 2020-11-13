@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yph.util.P;
 import com.yph.util.R;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户表 服务类
@@ -16,4 +18,13 @@ import com.yph.util.R;
 public interface IUserService extends IService<UserEntity> {
 
     R userRegister(P p) throws Exception;
+
+    R userLogin(P p) throws Exception;
+
+    void userUpgrade();
+
+    Boolean updateSumTeamEnergySource(List<String> userId, String performance);
+
+
+    String selectUserById(Integer userId);
 }

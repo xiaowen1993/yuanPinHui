@@ -1,6 +1,7 @@
 package com.yph.config;
 
 
+import com.yph.enun.MqParameterEnum;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -31,21 +32,21 @@ public class MqConfig {
         return new RabbitTemplate(connectionFactory);
     }
 
-//    @Bean
-//    public DirectExchange defaultExchange() {
-//        return new DirectExchange(MqParameterEnum.ShopBillQueue.getExchangeName());
-//    }
-//
-//    @Bean
-//    public Queue queue() {
-//        //名字  是否持久化
-//        return new Queue(MqParameterEnum.ShopBillQueue.getQueueName(), true);
-//    }
-//
-//    @Bean
-//    public Binding binding() {
-//        //绑定一个队列  to: 绑定到哪个交换机上面 with：绑定的路由建（routingKey）
-//        return BindingBuilder.bind(queue()).to(defaultExchange()).with(MqParameterEnum.ShopBillQueue.getExchangeKeyName());
-//    }
+    @Bean
+    public DirectExchange defaultExchange() {
+        return new DirectExchange(MqParameterEnum.UserQueue.getExchangeName());
+    }
+
+    @Bean
+    public Queue queue() {
+        //名字  是否持久化
+        return new Queue(MqParameterEnum.UserQueue.getQueueName(), true);
+    }
+
+    @Bean
+    public Binding binding() {
+        //绑定一个队列  to: 绑定到哪个交换机上面 with：绑定的路由建（routingKey）
+        return BindingBuilder.bind(queue()).to(defaultExchange()).with(MqParameterEnum.UserQueue.getExchangeKeyName());
+    }
 
 }

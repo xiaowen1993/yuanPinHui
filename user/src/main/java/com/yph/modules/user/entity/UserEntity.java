@@ -130,6 +130,33 @@ public class UserEntity implements Serializable {
      */
     private Long freezeBean;
 
+    /**
+     * 个人总业绩
+     */
+    private Long sumEnergySource;
+
+
+    /**
+     *团队总业绩
+     */
+    private Long sumTeamEnergySource;
+
+    public Long getSumEnergySource() {
+        return sumEnergySource;
+    }
+
+    public void setSumEnergySource(Long sumEnergySource) {
+        this.sumEnergySource = sumEnergySource;
+    }
+
+    public Long getSumTeamEnergySource() {
+        return sumTeamEnergySource;
+    }
+
+    public void setSumTeamEnergySource(Long sumTeamEnergySource) {
+        this.sumTeamEnergySource = sumTeamEnergySource;
+    }
+
     public Integer getUserId() {
         return userId;
     }

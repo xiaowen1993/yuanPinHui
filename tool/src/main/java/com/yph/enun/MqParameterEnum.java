@@ -1,6 +1,7 @@
 package com.yph.enun;
 
 
+import com.yph.paramter.MqParamter;
 
 /**
  * Mq配置相关参数
@@ -10,7 +11,7 @@ package com.yph.enun;
 public enum MqParameterEnum {
 
     //拼团队列
-    SpellQueue("spellQueue", "direct.key", "SpellDirectExchange");
+    UserQueue(MqParamter.USER_QUEUE_NAME, "direct.key", "userExchange");
 
 
     String queueName;

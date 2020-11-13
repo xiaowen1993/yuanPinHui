@@ -45,6 +45,15 @@ public enum TipMsgEnum {
 
     private String msg;
 
+    public  static TipMsgEnum forMsg(String msg){
+        for (TipMsgEnum value : values()) {
+            if (value.getMsg().equals(msg)) {
+                return value;
+            }
+        }
+        return DEFAULT_ERROR_MSG;
+    }
+
 
       TipMsgEnum(int code, String msg){
           this.code = code;

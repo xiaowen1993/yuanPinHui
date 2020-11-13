@@ -1,6 +1,7 @@
 package com.yph.modules.user.controller;
 
 
+import com.yph.annotation.PassToken;
 import com.yph.annotation.Pmap;
 import com.yph.modules.user.service.IUserService;
 import com.yph.util.P;
@@ -35,11 +36,22 @@ public class UserController {
      *  String inviterId 邀请人ID
      */
     //用户注册
+    @PassToken
     @RequestMapping("/userRegister")
     public R userRegister(@Pmap P p) throws Exception {
         ValidateUtli.validateParams(p,"phone","password","code");
         return  userService.userRegister(p);
     }
+
+
+    //用户登录
+    @PassToken
+    @RequestMapping("/userLogin")
+    public R userLogin(@Pmap P p) throws Exception {
+        ValidateUtli.validateParams(p,"phone");
+        return  userService.userLogin(p);
+    }
+
 
 
 }
