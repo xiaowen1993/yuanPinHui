@@ -60,6 +60,11 @@ public class SysDIcController {
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     public R save(@Pmap P p) throws Exception {
         SysDictEntity sysDictEntity = p.thisToEntity(SysDictEntity.class);
+        if (p.getInt("status").equals("on")){
+            p.put("status",0);
+        }else {
+            p.put("status",1);
+        }
         return R.success("success",dictService.save(sysDictEntity));
     }
 
