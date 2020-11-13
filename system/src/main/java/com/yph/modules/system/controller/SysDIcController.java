@@ -1,6 +1,7 @@
 package com.yph.modules.system.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.yph.annotation.Pmap;
 import com.yph.modules.system.entity.SysDictEntity;
 import com.yph.modules.system.service.SysDictService;
@@ -60,6 +61,16 @@ public class SysDIcController {
     public R save(@Pmap P p) throws Exception {
         SysDictEntity sysDictEntity = p.thisToEntity(SysDictEntity.class);
         return R.success("success",dictService.save(sysDictEntity));
+    }
+
+    /**
+     * 修改字典状态
+     */
+    @RequestMapping(value = "/updateStatus",method = RequestMethod.POST)
+    public R updateStatus(@Pmap P p){
+        UpdateWrapper<SysDictEntity> wrapper = new UpdateWrapper<>();
+        wrapper.eq("status", "status");
+        return R.success("success",dictService.update(wrapper));
     }
 
 }
