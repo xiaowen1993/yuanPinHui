@@ -1,6 +1,8 @@
 package com.yph.modules.system.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yph.annotation.Pmap;
 import com.yph.modules.system.entity.SysDictEntity;
 import com.yph.modules.system.entity.SysDictTypeEntity;
@@ -32,7 +34,13 @@ public class SysDicTypeController {
      */
     @RequestMapping(value = "/list",method = RequestMethod.GET)
     public R list(@Pmap P p){
-        return R.success("success",dictTypeService.list());
+        p.initPageArg();
+        Page<SysDictTypeEntity> objectPage = new Page<>(p.getInt("page"),p.getInt("limit"));
+        p.removeByKey(p);
+        Page<SysDictTypeEntity> pageObject = dictTypeService.page(objectPage,new QueryWrapper<SysDictTypeEntity>()
+                .eq("name", p.getString("name"))
+        );
+        return R.success("success",pageObject.getRecords()).set("count",pageObject.getTotal());
     }
 
     /**
