@@ -45,7 +45,7 @@ public class SysDictEntity implements Serializable {
     /**
      * 状态（字典）
      */
-    private String status;
+    private Integer status;
 
     /**
      * 排序
@@ -117,14 +117,15 @@ public class SysDictEntity implements Serializable {
         this.parentId = parentId;
         return this;
     }
-    public String getStatus() {
+
+    public Integer getStatus() {
         return status;
     }
 
-    public SysDictEntity setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
-        return this;
     }
+
     public Integer getSort() {
         return sort;
     }

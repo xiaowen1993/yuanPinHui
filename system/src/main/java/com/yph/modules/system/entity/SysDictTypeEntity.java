@@ -20,7 +20,7 @@ public class SysDictTypeEntity implements Serializable {
     /**
      * 字典类型id
      */
-    private Integer dictTypeId;
+    private Integer id;
 
     /**
      * 字典类型编码
@@ -72,14 +72,14 @@ public class SysDictTypeEntity implements Serializable {
      */
     private Integer updateUser;
 
-    public Integer getDictTypeId() {
-        return dictTypeId;
+    public Integer getId() {
+        return id;
     }
 
-    public SysDictTypeEntity setDictTypeId(Integer dictTypeId) {
-        this.dictTypeId = dictTypeId;
-        return this;
+    public void setId(Integer id) {
+        this.id = id;
     }
+
     public String getCode() {
         return code;
     }
@@ -164,7 +164,7 @@ public class SysDictTypeEntity implements Serializable {
     @Override
     public String toString() {
         return "SysDictTypeEntity{" +
-            "dictTypeId=" + dictTypeId +
+            "id=" + id +
             ", code=" + code +
             ", name=" + name +
             ", description=" + description +
