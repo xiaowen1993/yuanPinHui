@@ -25,7 +25,7 @@ public class SysDeptEntity implements Serializable {
     /**
      * 父部门id
      */
-    private Long pid;
+    private Integer pid;
 
     /**
      * 简称
@@ -50,7 +50,7 @@ public class SysDeptEntity implements Serializable {
     /**
      * 创建人
      */
-    private Long createUser;
+    private Integer createUser;
 
     /**
      * 创建时间
@@ -60,107 +60,106 @@ public class SysDeptEntity implements Serializable {
     /**
      * 修改人
      */
-    private Long updateUser;
+    private Integer updateUser;
 
     /**
      * 修改时间
      */
     private Date updateTime;
 
+    @Override
+    public String toString() {
+        return "SysDeptEntity{" +
+                "deptId=" + deptId +
+                ", pid=" + pid +
+                ", simpleName='" + simpleName + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", description='" + description + '\'' +
+                ", sort=" + sort +
+                ", createUser=" + createUser +
+                ", createTime=" + createTime +
+                ", updateUser=" + updateUser +
+                ", updateTime=" + updateTime +
+                '}';
+    }
+
     public Integer getDeptId() {
         return deptId;
     }
 
-    public SysDeptEntity setDeptId(Integer deptId) {
+    public void setDeptId(Integer deptId) {
         this.deptId = deptId;
-        return this;
     }
-    public Long getPid() {
+
+    public Integer getPid() {
         return pid;
     }
 
-    public SysDeptEntity setPid(Long pid) {
+    public void setPid(Integer pid) {
         this.pid = pid;
-        return this;
     }
+
     public String getSimpleName() {
         return simpleName;
     }
 
-    public SysDeptEntity setSimpleName(String simpleName) {
+    public void setSimpleName(String simpleName) {
         this.simpleName = simpleName;
-        return this;
     }
+
     public String getFullName() {
         return fullName;
     }
 
-    public SysDeptEntity setFullName(String fullName) {
+    public void setFullName(String fullName) {
         this.fullName = fullName;
-        return this;
     }
+
     public String getDescription() {
         return description;
     }
 
-    public SysDeptEntity setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
-        return this;
     }
+
     public Integer getSort() {
         return sort;
     }
 
-    public SysDeptEntity setSort(Integer sort) {
+    public void setSort(Integer sort) {
         this.sort = sort;
-        return this;
     }
-    public Long getCreateUser() {
+
+    public Integer getCreateUser() {
         return createUser;
     }
 
-    public SysDeptEntity setCreateUser(Long createUser) {
+    public void setCreateUser(Integer createUser) {
         this.createUser = createUser;
-        return this;
     }
+
     public Date getCreateTime() {
         return createTime;
     }
 
-    public SysDeptEntity setCreateTime(Date createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-        return this;
     }
-    public Long getUpdateUser() {
+
+    public Integer getUpdateUser() {
         return updateUser;
     }
 
-    public SysDeptEntity setUpdateUser(Long updateUser) {
+    public void setUpdateUser(Integer updateUser) {
         this.updateUser = updateUser;
-        return this;
     }
+
     public Date getUpdateTime() {
         return updateTime;
     }
 
-    public SysDeptEntity setUpdateTime(Date updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "SysDeptEntity{" +
-            "deptId=" + deptId +
-            ", pid=" + pid +
-            ", simpleName=" + simpleName +
-            ", fullName=" + fullName +
-            ", description=" + description +
-            ", sort=" + sort +
-            ", createUser=" + createUser +
-            ", createTime=" + createTime +
-            ", updateUser=" + updateUser +
-            ", updateTime=" + updateTime +
-        "}";
     }
 }

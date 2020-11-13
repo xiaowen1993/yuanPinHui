@@ -40,7 +40,7 @@ public class SysDictTypeEntity implements Serializable {
     /**
      * 是否是系统字典，1-是，0-否
      */
-    private Long systemFlag;
+    private Integer systemFlag;
 
     /**
      * 状态(字典)
@@ -60,7 +60,7 @@ public class SysDictTypeEntity implements Serializable {
     /**
      * 创建人
      */
-    private Long createUser;
+    private Integer createUser;
 
     /**
      * 修改时间
@@ -70,7 +70,7 @@ public class SysDictTypeEntity implements Serializable {
     /**
      * 修改人
      */
-    private Long updateUser;
+    private Integer updateUser;
 
     public Integer getDictTypeId() {
         return dictTypeId;
@@ -104,11 +104,11 @@ public class SysDictTypeEntity implements Serializable {
         this.description = description;
         return this;
     }
-    public Long getSystemFlag() {
+    public Integer getSystemFlag() {
         return systemFlag;
     }
 
-    public SysDictTypeEntity setSystemFlag(Long systemFlag) {
+    public SysDictTypeEntity setSystemFlag(Integer systemFlag) {
         this.systemFlag = systemFlag;
         return this;
     }
@@ -136,11 +136,11 @@ public class SysDictTypeEntity implements Serializable {
         this.createTime = createTime;
         return this;
     }
-    public Long getCreateUser() {
+    public Integer getCreateUser() {
         return createUser;
     }
 
-    public SysDictTypeEntity setCreateUser(Long createUser) {
+    public SysDictTypeEntity setCreateUser(Integer createUser) {
         this.createUser = createUser;
         return this;
     }
@@ -152,11 +152,11 @@ public class SysDictTypeEntity implements Serializable {
         this.updateTime = updateTime;
         return this;
     }
-    public Long getUpdateUser() {
+    public Integer getUpdateUser() {
         return updateUser;
     }
 
-    public SysDictTypeEntity setUpdateUser(Long updateUser) {
+    public SysDictTypeEntity setUpdateUser(Integer updateUser) {
         this.updateUser = updateUser;
         return this;
     }

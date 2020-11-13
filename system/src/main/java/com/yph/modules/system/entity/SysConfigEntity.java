@@ -40,7 +40,7 @@ public class SysConfigEntity implements Serializable {
     /**
      * 字典类型的编码
      */
-    private Long dictTypeId;
+    private Integer dictTypeId;
 
     /**
      * 属性值，如果是字典中的类型，则为dict的code
@@ -60,7 +60,7 @@ public class SysConfigEntity implements Serializable {
     /**
      * 创建人
      */
-    private Long createUser;
+    private Integer createUser;
 
     /**
      * 更新时间
@@ -70,111 +70,110 @@ public class SysConfigEntity implements Serializable {
     /**
      * 更新人
      */
-    private Long updateUser;
+    private Integer updateUser;
+
+    @Override
+    public String toString() {
+        return "SysConfigEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", dictFlag='" + dictFlag + '\'' +
+                ", dictTypeId=" + dictTypeId +
+                ", value='" + value + '\'' +
+                ", remark='" + remark + '\'' +
+                ", createTime=" + createTime +
+                ", createUser=" + createUser +
+                ", updateTime=" + updateTime +
+                ", updateUser=" + updateUser +
+                '}';
+    }
 
     public Integer getId() {
         return id;
     }
 
-    public SysConfigEntity setId(Integer id) {
+    public void setId(Integer id) {
         this.id = id;
-        return this;
     }
+
     public String getName() {
         return name;
     }
 
-    public SysConfigEntity setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
+
     public String getCode() {
         return code;
     }
 
-    public SysConfigEntity setCode(String code) {
+    public void setCode(String code) {
         this.code = code;
-        return this;
     }
+
     public String getDictFlag() {
         return dictFlag;
     }
 
-    public SysConfigEntity setDictFlag(String dictFlag) {
+    public void setDictFlag(String dictFlag) {
         this.dictFlag = dictFlag;
-        return this;
     }
-    public Long getDictTypeId() {
+
+    public Integer getDictTypeId() {
         return dictTypeId;
     }
 
-    public SysConfigEntity setDictTypeId(Long dictTypeId) {
+    public void setDictTypeId(Integer dictTypeId) {
         this.dictTypeId = dictTypeId;
-        return this;
     }
+
     public String getValue() {
         return value;
     }
 
-    public SysConfigEntity setValue(String value) {
+    public void setValue(String value) {
         this.value = value;
-        return this;
     }
+
     public String getRemark() {
         return remark;
     }
 
-    public SysConfigEntity setRemark(String remark) {
+    public void setRemark(String remark) {
         this.remark = remark;
-        return this;
     }
+
     public Date getCreateTime() {
         return createTime;
     }
 
-    public SysConfigEntity setCreateTime(Date createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-        return this;
     }
-    public Long getCreateUser() {
+
+    public Integer getCreateUser() {
         return createUser;
     }
 
-    public SysConfigEntity setCreateUser(Long createUser) {
+    public void setCreateUser(Integer createUser) {
         this.createUser = createUser;
-        return this;
     }
+
     public Date getUpdateTime() {
         return updateTime;
     }
 
-    public SysConfigEntity setUpdateTime(Date updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-        return this;
     }
-    public Long getUpdateUser() {
+
+    public Integer getUpdateUser() {
         return updateUser;
     }
 
-    public SysConfigEntity setUpdateUser(Long updateUser) {
+    public void setUpdateUser(Integer updateUser) {
         this.updateUser = updateUser;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "SysConfigEntity{" +
-            "id=" + id +
-            ", name=" + name +
-            ", code=" + code +
-            ", dictFlag=" + dictFlag +
-            ", dictTypeId=" + dictTypeId +
-            ", value=" + value +
-            ", remark=" + remark +
-            ", createTime=" + createTime +
-            ", createUser=" + createUser +
-            ", updateTime=" + updateTime +
-            ", updateUser=" + updateUser +
-        "}";
     }
 }

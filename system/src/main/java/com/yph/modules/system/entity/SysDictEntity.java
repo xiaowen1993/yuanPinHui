@@ -40,7 +40,7 @@ public class SysDictEntity implements Serializable {
     /**
      * 上级代码id
      */
-    private Long parentId;
+    private Integer parentId;
 
     /**
      * 状态（字典）
@@ -70,12 +70,12 @@ public class SysDictEntity implements Serializable {
     /**
      * 创建人
      */
-    private Long createUser;
+    private Integer createUser;
 
     /**
      * 修改人
      */
-    private Long updateUser;
+    private Integer updateUser;
 
     public Integer getDictId() {
         return dictId;
@@ -109,11 +109,11 @@ public class SysDictEntity implements Serializable {
         this.name = name;
         return this;
     }
-    public Long getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public SysDictEntity setParentId(Long parentId) {
+    public SysDictEntity setParentId(Integer parentId) {
         this.parentId = parentId;
         return this;
     }
@@ -157,19 +157,19 @@ public class SysDictEntity implements Serializable {
         this.updateTime = updateTime;
         return this;
     }
-    public Long getCreateUser() {
+    public Integer getCreateUser() {
         return createUser;
     }
 
-    public SysDictEntity setCreateUser(Long createUser) {
+    public SysDictEntity setCreateUser(Integer createUser) {
         this.createUser = createUser;
         return this;
     }
-    public Long getUpdateUser() {
+    public Integer getUpdateUser() {
         return updateUser;
     }
 
-    public SysDictEntity setUpdateUser(Long updateUser) {
+    public SysDictEntity setUpdateUser(Integer updateUser) {
         this.updateUser = updateUser;
         return this;
     }

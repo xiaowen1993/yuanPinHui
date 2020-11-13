@@ -40,7 +40,7 @@ public class SysNoticeEntity implements Serializable {
     /**
      * 创建人
      */
-    private Long createUser;
+    private Integer createUser;
 
     /**
      * 修改时间
@@ -50,7 +50,7 @@ public class SysNoticeEntity implements Serializable {
     /**
      * 修改人
      */
-    private Long updateUser;
+    private Integer updateUser;
 
     public Integer getNoticeId() {
         return noticeId;
@@ -84,11 +84,11 @@ public class SysNoticeEntity implements Serializable {
         this.createTime = createTime;
         return this;
     }
-    public Long getCreateUser() {
+    public Integer getCreateUser() {
         return createUser;
     }
 
-    public SysNoticeEntity setCreateUser(Long createUser) {
+    public SysNoticeEntity setCreateUser(Integer createUser) {
         this.createUser = createUser;
         return this;
     }
@@ -100,11 +100,11 @@ public class SysNoticeEntity implements Serializable {
         this.updateTime = updateTime;
         return this;
     }
-    public Long getUpdateUser() {
+    public Integer getUpdateUser() {
         return updateUser;
     }
 
-    public SysNoticeEntity setUpdateUser(Long updateUser) {
+    public SysNoticeEntity setUpdateUser(Integer updateUser) {
         this.updateUser = updateUser;
         return this;
     }

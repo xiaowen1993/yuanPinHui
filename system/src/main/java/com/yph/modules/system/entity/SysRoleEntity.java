@@ -46,7 +46,7 @@ public class SysRoleEntity implements Serializable {
     /**
      * 创建用户
      */
-    private Long createUser;
+    private Integer createUser;
 
     /**
      * 创建时间
@@ -56,7 +56,7 @@ public class SysRoleEntity implements Serializable {
     /**
      * 修改用户
      */
-    private Long updateUser;
+    private Integer updateUser;
 
     /**
      * 修改时间
@@ -113,11 +113,11 @@ public class SysRoleEntity implements Serializable {
         this.dsType = dsType;
         return this;
     }
-    public Long getCreateUser() {
+    public Integer getCreateUser() {
         return createUser;
     }
 
-    public SysRoleEntity setCreateUser(Long createUser) {
+    public SysRoleEntity setCreateUser(Integer createUser) {
         this.createUser = createUser;
         return this;
     }
@@ -129,11 +129,11 @@ public class SysRoleEntity implements Serializable {
         this.createTime = createTime;
         return this;
     }
-    public Long getUpdateUser() {
+    public Integer getUpdateUser() {
         return updateUser;
     }
 
-    public SysRoleEntity setUpdateUser(Long updateUser) {
+    public SysRoleEntity setUpdateUser(Integer updateUser) {
         this.updateUser = updateUser;
         return this;
     }
