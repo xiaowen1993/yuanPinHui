@@ -85,12 +85,11 @@ public class SysMenuController {
 
     /**
      * 根据id进行删除
-     * @param id
      * @return
      */
     @RequestMapping(value = "/removeById",method = RequestMethod.GET)
-    public R removeById(Integer id){
-        menuService.removeById(id);
+    public R removeById(@Pmap P p){
+        menuService.removeById(p.getInt("id"));
         return R.success();
     }
 
@@ -106,6 +105,8 @@ public class SysMenuController {
         SysMenuEntity sysMenuEntity = p.thisToEntity(SysMenuEntity.class);
         return menuService.updateById(sysMenuEntity);
     }
+
+
 
 
 
