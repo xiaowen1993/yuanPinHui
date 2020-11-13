@@ -1,16 +1,16 @@
 package com.yph.modules.system.service;
 
-import com.yph.modules.system.entity.RegionEntity;
+import com.yph.modules.system.entity.SysDictTypeEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- * 行政区域表 服务类
+ * 字典类型表 服务类
  * </p>
  *
  * @author 
  * @since 2020-11-12
  */
-public interface IRegionService extends IService<RegionEntity> {
+public interface SysDictTypeService extends IService<SysDictTypeEntity> {
 
 }

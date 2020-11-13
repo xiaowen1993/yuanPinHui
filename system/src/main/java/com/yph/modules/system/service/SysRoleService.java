@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author 
  * @since 2020-11-12
  */
-public interface ISysRoleService extends IService<SysRoleEntity> {
+public interface SysRoleService extends IService<SysRoleEntity> {
 
 }

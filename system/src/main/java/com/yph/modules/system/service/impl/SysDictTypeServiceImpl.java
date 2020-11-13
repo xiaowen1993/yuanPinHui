@@ -2,7 +2,7 @@ package com.yph.modules.system.service.impl;
 
 import com.yph.modules.system.entity.SysDictTypeEntity;
 import com.yph.modules.system.mapper.SysDictTypeMapper;
-import com.yph.modules.system.service.ISysDictTypeService;
+import com.yph.modules.system.service.SysDictTypeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-11-12
  */
 @Service
-public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDictTypeEntity> implements ISysDictTypeService {
+public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDictTypeEntity> implements SysDictTypeService {
 
 }

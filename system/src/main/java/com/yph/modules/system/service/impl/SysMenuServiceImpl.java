@@ -2,7 +2,7 @@ package com.yph.modules.system.service.impl;
 
 import com.yph.modules.system.entity.SysMenuEntity;
 import com.yph.modules.system.mapper.SysMenuMapper;
-import com.yph.modules.system.service.ISysMenuService;
+import com.yph.modules.system.service.SysMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-11-12
  */
 @Service
-public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity> implements ISysMenuService {
+public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuEntity> implements SysMenuService {
 
 }

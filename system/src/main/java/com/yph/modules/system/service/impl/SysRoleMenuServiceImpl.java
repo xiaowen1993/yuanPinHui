@@ -2,7 +2,7 @@ package com.yph.modules.system.service.impl;
 
 import com.yph.modules.system.entity.SysRoleMenuEntity;
 import com.yph.modules.system.mapper.SysRoleMenuMapper;
-import com.yph.modules.system.service.ISysRoleMenuService;
+import com.yph.modules.system.service.SysRoleMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-11-12
  */
 @Service
-public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenuEntity> implements ISysRoleMenuService {
+public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenuEntity> implements SysRoleMenuService {
 
 }

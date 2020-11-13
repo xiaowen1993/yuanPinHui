@@ -2,7 +2,7 @@ package com.yph.modules.system.service.impl;
 
 import com.yph.modules.system.entity.SysRoleEntity;
 import com.yph.modules.system.mapper.SysRoleMapper;
-import com.yph.modules.system.service.ISysRoleService;
+import com.yph.modules.system.service.SysRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-11-12
  */
 @Service
-public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity> implements ISysRoleService {
+public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity> implements SysRoleService {
 
 }
