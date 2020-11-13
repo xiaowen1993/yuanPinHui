@@ -59,6 +59,11 @@ public class AdminEntity implements Serializable {
     private String regionName;
 
     /**
+     * 激活
+     */
+    private Integer activation;
+
+    /**
      * 省
      */
     private Integer province;
@@ -137,6 +142,15 @@ public class AdminEntity implements Serializable {
         this.regionName = regionName;
         return this;
     }
+
+    public Integer getActivation() {
+        return activation;
+    }
+
+    public void setActivation(Integer activation) {
+        this.activation = activation;
+    }
+
     public Integer getProvince() {
         return province;
     }
@@ -165,17 +179,18 @@ public class AdminEntity implements Serializable {
     @Override
     public String toString() {
         return "AdminEntity{" +
-            "adminId=" + adminId +
-            ", adminNikename=" + adminNikename +
-            ", adminName=" + adminName +
-            ", adminPassword=" + adminPassword +
-            ", adminLevel=" + adminLevel +
-            ", regionId=" + regionId +
-            ", adminBoss=" + adminBoss +
-            ", regionName=" + regionName +
-            ", province=" + province +
-            ", addTime=" + addTime +
-            ", updateTime=" + updateTime +
-        "}";
+                "adminId=" + adminId +
+                ", adminNikename='" + adminNikename + '\'' +
+                ", adminName='" + adminName + '\'' +
+                ", adminPassword='" + adminPassword + '\'' +
+                ", adminLevel='" + adminLevel + '\'' +
+                ", regionId=" + regionId +
+                ", adminBoss=" + adminBoss +
+                ", regionName='" + regionName + '\'' +
+                ", activation=" + activation +
+                ", province=" + province +
+                ", addTime=" + addTime +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }
