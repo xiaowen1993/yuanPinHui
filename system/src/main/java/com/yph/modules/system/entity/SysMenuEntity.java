@@ -1,14 +1,17 @@
 package com.yph.modules.system.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
  * 
  * </p>
  *
- * @author 
+ * @author LC
  * @since 2020-11-12
  */
 @TableName("sys_menu")
@@ -62,6 +65,18 @@ public class SysMenuEntity implements Serializable {
      * 排序顺序，小的在上面
      */
     private Integer sort;
+
+
+    @TableField(exist = false)
+    private List<SysMenuEntity> children;
+
+    public List<SysMenuEntity> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<SysMenuEntity> children) {
+        this.children = children;
+    }
 
     public Integer getId() {
         return id;
@@ -147,16 +162,17 @@ public class SysMenuEntity implements Serializable {
     @Override
     public String toString() {
         return "SysMenuEntity{" +
-            "id=" + id +
-            ", pid=" + pid +
-            ", name=" + name +
-            ", uri=" + uri +
-            ", icon=" + icon +
-            ", type=" + type +
-            ", role=" + role +
-            ", power=" + power +
-            ", forward=" + forward +
-            ", sort=" + sort +
-        "}";
+                "id=" + id +
+                ", pid='" + pid + '\'' +
+                ", name='" + name + '\'' +
+                ", uri='" + uri + '\'' +
+                ", icon='" + icon + '\'' +
+                ", type=" + type +
+                ", role=" + role +
+                ", power=" + power +
+                ", forward='" + forward + '\'' +
+                ", sort=" + sort +
+                ", children=" + children +
+                '}';
     }
 }

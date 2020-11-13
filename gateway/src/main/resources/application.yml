@@ -34,4 +34,7 @@ spring:
           uri: lb://SERVER-USER
           predicates:
             - Path=/user/**
-
+        - id: system
+          uri: lb://SERVER-SYSTEM
+          predicates:
+            - Path=/system/**

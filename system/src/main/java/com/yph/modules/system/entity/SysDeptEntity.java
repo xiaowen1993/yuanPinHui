@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 部门表
  * </p>
  *
- * @author 
+ * @author LC
  * @since 2020-11-12
  */
 @TableName("sys_dept")

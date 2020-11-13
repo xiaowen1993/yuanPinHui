@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 基础字典
  * </p>
  *
- * @author 
+ * @author LC
  * @since 2020-11-12
  */
 @TableName("sys_dict")

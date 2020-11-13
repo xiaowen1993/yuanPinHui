@@ -8,7 +8,7 @@ import java.io.Serializable;
  * 角色菜单表
  * </p>
  *
- * @author 
+ * @author LC
  * @since 2020-11-12
  */
 @TableName("sys_role_menu")

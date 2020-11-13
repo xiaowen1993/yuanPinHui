@@ -8,7 +8,7 @@ import java.io.Serializable;
  * 用户角色表
  * </p>
  *
- * @author 
+ * @author LC
  * @since 2020-11-12
  */
 @TableName("sys_user_role")

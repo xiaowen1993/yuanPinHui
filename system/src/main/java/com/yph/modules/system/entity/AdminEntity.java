@@ -12,7 +12,7 @@ import java.util.Date;
  * 
  * </p>
  *
- * @author 
+ * @author LC
  * @since 2020-11-12
  */
 @TableName("admin")

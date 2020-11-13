@@ -12,7 +12,7 @@ import java.util.Date;
  * 系统角色表
  * </p>
  *
- * @author 
+ * @author LC
  * @since 2020-11-12
  */
 @TableName("sys_role")

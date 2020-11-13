@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 行政区域表
  * </p>
  *
- * @author 
+ * @author LC
  * @since 2020-11-12
  */
 @TableName("region")
