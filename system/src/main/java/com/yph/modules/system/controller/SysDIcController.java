@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/system/dic")
-public class DIcController {
+public class SysDIcController {
 
     @Autowired
     private SysDictService dictService;
