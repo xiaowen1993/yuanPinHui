@@ -13,6 +13,7 @@
         <module>tool</module>
         <module>generator</module>
         <module>gateway</module>
+        <module>system</module>
     </modules>
 
 
