@@ -435,6 +435,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
             String[] split = relation.split(",");
             QueryWrapper<UserEntity> queryWrapper=new QueryWrapper<>();
             queryWrapper.in("user_id",Arrays.asList(split));
+            queryWrapper.orderByDesc("user_id");
             List<UserEntity> userEntities = userMapper.selectList(queryWrapper);
             for (UserEntity entity : userEntities) {
                 if(entity.getUserLevel()!=0){
@@ -467,7 +468,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
                 userEntityNew.setTopRefereeId(topRefereeId);
             String relation = userEntity.getRelation();
             if(!StringUtils.isBlank(relation))
-                userEntity.setRelation(relation+","+inviterId);
+                userEntityNew.setRelation(relation+","+inviterId);
+            else
+                userEntityNew.setRelation(inviterId+"");
         }
         Date date = new Date();
         userEntityNew.setAddTime(date);

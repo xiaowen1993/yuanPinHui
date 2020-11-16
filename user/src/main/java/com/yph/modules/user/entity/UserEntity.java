@@ -141,6 +141,38 @@ public class UserEntity implements Serializable {
      */
     private Long sumTeamEnergySource;
 
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "userId=" + userId +
+                ", userPassword='" + userPassword + '\'' +
+                ", userLastLoginTime=" + userLastLoginTime +
+                ", userLevel=" + userLevel +
+                ", userNickname='" + userNickname + '\'' +
+                ", userMobile='" + userMobile + '\'' +
+                ", userAvatar='" + userAvatar + '\'' +
+                ", userStatus=" + userStatus +
+                ", userReferrer=" + userReferrer +
+                ", addTime=" + addTime +
+                ", updateTime=" + updateTime +
+                ", goupSize=" + goupSize +
+                ", underlingSize=" + underlingSize +
+                ", indirectSize=" + indirectSize +
+                ", topRefereeId=" + topRefereeId +
+                ", lifeSource=" + lifeSource +
+                ", energySource=" + energySource +
+                ", bean=" + bean +
+                ", relation='" + relation + '\'' +
+                ", bankCard='" + bankCard + '\'' +
+                ", freezeLifeSource=" + freezeLifeSource +
+                ", freezeEnergySource=" + freezeEnergySource +
+                ", freezeBean=" + freezeBean +
+                ", sumEnergySource=" + sumEnergySource +
+                ", sumTeamEnergySource=" + sumTeamEnergySource +
+                '}';
+    }
+
     public Long getSumEnergySource() {
         return sumEnergySource;
     }
