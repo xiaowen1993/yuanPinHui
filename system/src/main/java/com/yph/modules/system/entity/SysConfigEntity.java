@@ -1,5 +1,7 @@
 package com.yph.modules.system.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 import java.io.Serializable;
@@ -20,6 +22,7 @@ public class SysConfigEntity implements Serializable {
     /**
      * 主键
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
