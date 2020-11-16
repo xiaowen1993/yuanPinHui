@@ -424,6 +424,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         return userMapper.selectUserById(userId);
     }
 
+    @Override
+    public R selectUserBySuperior(P p) {
+        Integer userId = p.getInt("userId");
+        Integer userRank = p.getInt("userRank");
+        UserEntity userEntity = userMapper.selectById(userId);
+        String relation = userEntity.getRelation();
+        List<UserEntity> lists=new ArrayList<>();
+        if(!StringUtils.isBlank(relation)){
+            String[] split = relation.split(",");
+            QueryWrapper<UserEntity> queryWrapper=new QueryWrapper<>();
+            queryWrapper.in("user_id",Arrays.asList(split));
+            List<UserEntity> userEntities = userMapper.selectList(queryWrapper);
+            for (UserEntity entity : userEntities) {
+                if(entity.getUserLevel()!=0){
+                    if(userRank!=null&&entity.getUserLevel()>=userRank){
+                        lists.add(entity);
+                    }else if(userRank==null){
+                        lists.add(entity);
+                    }
+                }
+            }
+        }
+        return R.success().data(lists);
+    }
+
 
     @Override
     public R userRegister(P p) throws Exception {

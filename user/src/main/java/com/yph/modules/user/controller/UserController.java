@@ -53,5 +53,13 @@ public class UserController {
     }
 
 
+    //查询用户上级所有V1-V6  或者指定以上级别(内部调用)
+    @RequestMapping("/selectUserBySuperior")
+    public R selectUserBySuperior(@Pmap P p) throws Exception {
+        ValidateUtli.validateParams(p,"userId");
+        return userService.selectUserBySuperior(p);
+    }
+
+
 
 }
