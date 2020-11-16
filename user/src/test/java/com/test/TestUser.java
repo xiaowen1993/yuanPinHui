@@ -11,8 +11,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import sun.security.krb5.internal.PAForUserEnc;
 
 import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={AppUser.class})// 指定启动类
@@ -37,11 +39,22 @@ public class TestUser {
     }
 
 
+    //测试 查询用户直推和间推
+    @Test
+    public void testSelectUserReferrerTo(){
+        P p=new P();
+        p.put("userId",24232);
+        R r = userService.selectUserReferrerTo(p);
+        Map<String,String> map= (Map<String, String>) r.get("data");
+        System.out.println(map);
+    }
+
+
     //查询用户上级
     @Test
     public void testSelectUserBySuperior() throws Exception {
         P p=new P();
-        p.put("userId",24234);
+        p.put("userId",24209);
 //        p.put("userRank",2);
         R r = userService.selectUserBySuperior(p);
         Object data = r.get("data");

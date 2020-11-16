@@ -450,6 +450,36 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         return R.success().data(lists);
     }
 
+    @Override
+    public R selectUserReferrerTo(P p) {
+        UserEntity userEntity = userMapper.selectById(p.getInt("userId"));
+        String relation = userEntity.getRelation();
+        return R.success().data(userIdSubstring(relation));
+    }
+
+
+    public  Map<String,String> userIdSubstring(String relation){
+        Map<String,String> map=new HashMap<>();
+        if(StringUtils.isBlank(relation))
+            return map;
+        int i = relation.lastIndexOf(",");
+        if(i==-1){
+            map.put("zhiTui",relation);
+            return map;
+        }
+        String zhiTui = relation.substring(i+1);
+        map.put("zhiTui",zhiTui);
+        String temp = relation.substring(0,i);
+        i = temp.lastIndexOf(",");
+        if(i==-1){
+            map.put("jianTui",temp);
+            return map;
+        }
+        String jianTui = temp.substring(i+1);
+        map.put("jianTui",jianTui);
+        return map;
+    }
+
 
     @Override
     public R userRegister(P p) throws Exception {

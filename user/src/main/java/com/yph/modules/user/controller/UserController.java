@@ -3,6 +3,7 @@ package com.yph.modules.user.controller;
 
 import com.yph.annotation.PassToken;
 import com.yph.annotation.Pmap;
+import com.yph.modules.user.entity.UserEntity;
 import com.yph.modules.user.service.IUserService;
 import com.yph.util.P;
 import com.yph.util.R;
@@ -11,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -43,6 +47,14 @@ public class UserController {
         return  userService.userRegister(p);
     }
 
+
+    //根据用户id查询推荐人和推荐人的推荐人
+    @RequestMapping("/selectUserReferrerTo")
+    @PassToken
+    public R selectUserReferrerTo(@Pmap P p) throws Exception {
+        ValidateUtli.validateParams(p,"userId");
+        return userService.selectUserReferrerTo(p);
+    }
 
     //用户登录
     @PassToken
