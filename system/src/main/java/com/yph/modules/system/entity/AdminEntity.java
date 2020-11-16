@@ -68,6 +68,12 @@ public class AdminEntity implements Serializable {
      */
     private Integer province;
 
+
+    /**
+     * 头像
+     */
+    private String avatar;
+
     /**
      * 创建时间
      */
@@ -159,6 +165,15 @@ public class AdminEntity implements Serializable {
         this.province = province;
         return this;
     }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public Date getAddTime() {
         return addTime;
     }
@@ -189,6 +204,7 @@ public class AdminEntity implements Serializable {
                 ", regionName='" + regionName + '\'' +
                 ", activation=" + activation +
                 ", province=" + province +
+                ", avatar='" + avatar + '\'' +
                 ", addTime=" + addTime +
                 ", updateTime=" + updateTime +
                 '}';
