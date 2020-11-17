@@ -31,4 +31,6 @@ public interface IUserService extends IService<UserEntity> {
     R selectUserBySuperior(P p);
 
     R selectUserReferrerTo(P p);
+
+    R selectUserReferrerTo(Integer userId);
 }

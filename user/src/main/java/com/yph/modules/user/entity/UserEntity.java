@@ -173,6 +173,14 @@ public class UserEntity implements Serializable {
                 '}';
     }
 
+    public UserEntity() {
+    }
+
+    public UserEntity(Integer userId, Integer userLevel) {
+        this.userId = userId;
+        this.userLevel = userLevel;
+    }
+
     public Long getSumEnergySource() {
         return sumEnergySource;
     }

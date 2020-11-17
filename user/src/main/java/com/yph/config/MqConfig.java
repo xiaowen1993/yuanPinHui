@@ -49,4 +49,23 @@ public class MqConfig {
         return BindingBuilder.bind(queue()).to(defaultExchange()).with(MqParameterEnum.UserQueue.getExchangeKeyName());
     }
 
+
+
+    @Bean
+    public DirectExchange allocationExchange() {
+        return new DirectExchange(MqParameterEnum.AllocationQueue.getExchangeName());
+    }
+
+    @Bean
+    public Queue allocationQueue() {
+        //名字  是否持久化
+        return new Queue(MqParameterEnum.AllocationQueue.getQueueName(), true);
+    }
+
+    @Bean
+    public Binding allocationBinding() {
+        //绑定一个队列  to: 绑定到哪个交换机上面 with：绑定的路由建（routingKey）
+        return BindingBuilder.bind(queue()).to(defaultExchange()).with(MqParameterEnum.AllocationQueue.getExchangeKeyName());
+    }
+
 }

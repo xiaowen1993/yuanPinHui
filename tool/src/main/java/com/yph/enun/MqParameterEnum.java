@@ -10,8 +10,9 @@ import com.yph.paramter.MqParamter;
  */
 public enum MqParameterEnum {
 
-    //拼团队列
-    UserQueue(MqParamter.USER_QUEUE_NAME, "direct.key", "userExchange");
+    //用户队列
+    UserQueue(MqParamter.USER_QUEUE_NAME, "direct.key", "userExchange"),
+    AllocationQueue(MqParamter.ALLOCATION_QUEUE_NAME,"direct.key", "allocationExchange");
 
 
     String queueName;

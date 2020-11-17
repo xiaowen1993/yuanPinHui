@@ -452,10 +452,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
     @Override
     public R selectUserReferrerTo(P p) {
-        UserEntity userEntity = userMapper.selectById(p.getInt("userId"));
+        return selectUserReferrerTo(p.getInt("userId"));
+    }
+
+    @Override
+    public R selectUserReferrerTo(Integer userId) {
+        UserEntity userEntity = userMapper.selectById(userId);
         String relation = userEntity.getRelation();
         return R.success().data(userIdSubstring(relation));
     }
+
 
 
     public  Map<String,String> userIdSubstring(String relation){
