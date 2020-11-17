@@ -9,6 +9,8 @@ import com.yph.modules.system.entity.AdminEntity;
 import com.yph.modules.system.entity.SysDeptEntity;
 import com.yph.modules.system.service.AdminService;
 import com.yph.modules.system.service.SysDeptService;
+import com.yph.param.RedisParamenter;
+import com.yph.redis.service.RedisService;
 import com.yph.util.P;
 import com.yph.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/system/dept")
 public class SysDeptController {
+
+    @Autowired
+    RedisService redisService;
+    
     @Autowired
     private SysDeptService sysDeptService;
 
@@ -39,6 +45,8 @@ public class SysDeptController {
     public R sysDeptAdd(@Pmap P p) throws Exception {
         SysDeptEntity sysDeptEntity = p.thisToEntity(SysDeptEntity.class);
         if(sysDeptEntity!=null){
+            AdminEntity adminEntity = redisService.get(p.getCookieValue(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY), AdminEntity.class);
+            sysDeptEntity.setCreateUser(adminEntity.getAdminName());
             sysDeptService.save(sysDeptEntity);
         }
         return R.success();
@@ -70,6 +78,8 @@ public class SysDeptController {
     @RequestMapping(value = "/sysDeptEdit",method = RequestMethod.POST)
     public R sysDeptEdit(@Pmap P p) throws Exception {
         SysDeptEntity sysDeptEntity = p.thisToEntity(SysDeptEntity.class);
+        AdminEntity adminEntity = redisService.get(p.getCookieValue(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY), AdminEntity.class);
+        sysDeptEntity.setUpdateUser(adminEntity.getAdminName());
         sysDeptService.update(sysDeptEntity,new UpdateWrapper<SysDeptEntity>().eq("dept_id",sysDeptEntity.getDeptId()));
         return R.success();
     }
@@ -79,9 +89,9 @@ public class SysDeptController {
      * @param p
      * @return
      */
-    @RequestMapping(value = "/sysDeptRemove",method = RequestMethod.POST)
+    @RequestMapping(value = "/sysDeptRemove",method = RequestMethod.DELETE)
     public R sysDeptRemove(@Pmap P p) throws Exception {
-        sysDeptService.removeById(p.getInt("dept_id"));
+        sysDeptService.removeById(p.getInt("deptId"));
         return R.success();
     }
 

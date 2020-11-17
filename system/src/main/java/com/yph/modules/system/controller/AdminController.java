@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yph.annotation.Pmap;
 import com.yph.modules.system.entity.AdminEntity;
 import com.yph.modules.system.service.AdminService;
+import com.yph.param.RedisParamenter;
 import com.yph.redis.service.RedisService;
 import com.yph.util.P;
 import com.yph.util.R;
@@ -119,9 +120,9 @@ public class AdminController {
      * @param p
      * @return
      */
-    @RequestMapping(value = "/adminRemove",method = RequestMethod.POST)
+    @RequestMapping(value = "/adminRemove",method = RequestMethod.DELETE)
     public R adminRemove(@Pmap P p) throws Exception {
-        adminService.removeById(p.getInt("admin_id"));
+        adminService.removeById(p.getInt("adminId"));
         return R.success();
     }
 

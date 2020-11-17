@@ -53,7 +53,7 @@ public class SysDeptEntity implements Serializable {
     /**
      * 创建人
      */
-    private Integer createUser;
+    private String createUser;
 
     /**
      * 创建时间
@@ -63,7 +63,7 @@ public class SysDeptEntity implements Serializable {
     /**
      * 修改人
      */
-    private Integer updateUser;
+    private String updateUser;
 
     /**
      * 修改时间
@@ -134,12 +134,20 @@ public class SysDeptEntity implements Serializable {
         this.sort = sort;
     }
 
-    public Integer getCreateUser() {
+    public String getCreateUser() {
         return createUser;
     }
 
-    public void setCreateUser(Integer createUser) {
+    public void setCreateUser(String createUser) {
         this.createUser = createUser;
+    }
+
+    public String getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser;
     }
 
     public Date getCreateTime() {
@@ -148,14 +156,6 @@ public class SysDeptEntity implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public Integer getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(Integer updateUser) {
-        this.updateUser = updateUser;
     }
 
     public Date getUpdateTime() {
