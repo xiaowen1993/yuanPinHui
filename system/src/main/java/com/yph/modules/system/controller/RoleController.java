@@ -1,20 +1,23 @@
 package com.yph.modules.system.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.yph.annotation.Jurisdiction;
 import com.yph.annotation.Pmap;
-import com.yph.modules.system.entity.SysRoleEntity;
-import com.yph.modules.system.entity.SysRoleMenuEntity;
+import com.yph.enun.AdminRoleEnum;
+import com.yph.modules.system.entity.*;
 import com.yph.modules.system.service.SysAdminRoleService;
+import com.yph.modules.system.service.SysMenuService;
 import com.yph.modules.system.service.SysRoleMenuService;
 import com.yph.modules.system.service.SysRoleService;
+import com.yph.param.RedisParamenter;
+import com.yph.redis.service.RedisService;
 import com.yph.util.P;
 import com.yph.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,8 +42,15 @@ public class RoleController {
     SysAdminRoleService sysAdminRoleService;
 
     @Autowired
-    SysRoleMenuService sysRoleMenuService;
+    SysMenuService sysMenuService;
 
+
+    @Autowired
+    RedisService redisService;
+
+    @Autowired
+    SysRoleMenuService sysRoleMenuService;
+    
 
     /**
      * 得到所有角色
@@ -95,13 +105,26 @@ public class RoleController {
 
 
     /**
-     * admin分配权限
+     * admin分配角色
      * @return
      */
     @RequestMapping(value = "/adminForRole",method = RequestMethod.POST)
+    @Jurisdiction
     public R adminForRole(@Pmap P p){
         String[] ids = p.getStringArray("ids");
-
+        List<SysAdminRoleEntity> list =new ArrayList<>();
+        List<String> root=new ArrayList<>();
+        AdminEntity adminEntity = redisService.get(p.getCookieValue(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY), AdminEntity.class);
+        for (String id : ids) {
+            SysMenuEntity sysMenuEntity = sysMenuService.getOne(new QueryWrapper<SysMenuEntity>().eq("id", id));
+            root.add(sysMenuEntity.getUri());
+            SysAdminRoleEntity sysAdminRoleEntity=new SysAdminRoleEntity();
+            sysAdminRoleEntity.setAdminId(adminEntity.getAdminId());
+            sysAdminRoleEntity.setRoleId(Integer.parseInt(id));
+            list.add(sysAdminRoleEntity);
+        }
+        redisService.set(AdminRoleEnum.ADMIN_ROLE_REDIS+adminEntity.getAdminName(),root);
+        sysAdminRoleService.saveBatch(list);
         return R.success();
     }
 
@@ -120,11 +143,7 @@ public class RoleController {
         if (menuIds.length==0){
             return R.error("至少选中一条");
         }
-
-        UpdateWrapper<SysRoleMenuEntity> updateWrapper=new UpdateWrapper<>();
-        updateWrapper.eq("role_id",p.getInt("roleId"));
-        sysRoleMenuService.remove(updateWrapper);
-
+        sysRoleMenuService.remove(new UpdateWrapper<SysRoleMenuEntity>().eq("role_id",p.getInt("roleId")));
         List<SysRoleMenuEntity> list=new ArrayList<>();
         for (String s:menuIds){
             SysRoleMenuEntity sysRoleMenuEntity=new SysRoleMenuEntity();
@@ -132,7 +151,6 @@ public class RoleController {
             sysRoleMenuEntity.setMenuId(Integer.parseInt(s));
             list.add(sysRoleMenuEntity);
         }
-
         sysRoleMenuService.saveBatch(list);
         return R.success();
     }
