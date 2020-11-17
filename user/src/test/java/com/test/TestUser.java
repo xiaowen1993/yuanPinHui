@@ -54,7 +54,7 @@ public class TestUser {
     @Test
     public void testSelectUserBySuperior() throws Exception {
         P p=new P();
-        p.put("userId",24209);
+        p.put("userId",24234);
 //        p.put("userRank",2);
         R r = userService.selectUserBySuperior(p);
         Object data = r.get("data");

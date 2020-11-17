@@ -9,6 +9,7 @@ import com.yph.util.P;
 import com.yph.util.R;
 import com.yph.util.utli.ValidateUtli;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +33,17 @@ public class UserController {
     @Autowired
     IUserService userService;
 
+    /**
+     *发送验证码
+     */
+    @PassToken
+    @PostMapping("/sendNote")
+    public R sendNote(@Pmap P p) throws Exception {
+        ValidateUtli.validateParams(p,"phone");
+        p.put("templateCode","SMS_200455393");
+        return userService.sendNote(p);
+    }
+
 
     /**
      *  String phone  手机号
@@ -50,7 +62,6 @@ public class UserController {
 
     //根据用户id查询推荐人和推荐人的推荐人
     @RequestMapping("/selectUserReferrerTo")
-    @PassToken
     public R selectUserReferrerTo(@Pmap P p) throws Exception {
         ValidateUtli.validateParams(p,"userId");
         return userService.selectUserReferrerTo(p);

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yph.util.P;
 import com.yph.util.R;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -31,6 +32,8 @@ public interface IUserService extends IService<UserEntity> {
     R selectUserBySuperior(P p);
 
     R selectUserReferrerTo(P p);
+
+    R sendNote(P p) throws UnsupportedEncodingException;
 
     R selectUserReferrerTo(Integer userId);
 }

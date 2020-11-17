@@ -8,6 +8,7 @@ import com.yph.modules.user.entity.UserEntity;
 import com.yph.modules.user.mapper.UserMapper;
 import com.yph.modules.user.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yph.modules.user.template.SmsTemplate;
 import com.yph.redis.service.RedisService;
 import com.yph.util.P;
 import com.yph.util.R;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -34,8 +36,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     @Autowired
     private UserMapper userMapper;
 
-//    @Autowired
-//    private RedisService redisService;
+    @Autowired
+    private SmsTemplate smsTemplate;
 
 
 
@@ -462,6 +464,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         return R.success().data(userIdSubstring(relation));
     }
 
+    @Override
+    public R sendNote(P p) throws UnsupportedEncodingException {
+        return R.success(smsTemplate.sendNote(p.getString("templateCode"),p.getString("phone")));
+    }
+
 
 
     public  Map<String,String> userIdSubstring(String relation){
@@ -494,6 +501,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         String code = p.getString("code");
         Integer inviterId = p.getInt("inviterId");
         UserEntity userEntityNew=new UserEntity();
+        String verify = smsTemplate.verify(phone, code);
+        if(!verify.equals("OK")){
+            return R.error(verify);
+        }
         if(inviterId!=null){
             UserEntity userEntity = userMapper.selectById(inviterId);
             if(userEntity==null)
@@ -544,12 +555,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         String code = p.getString("code");
         if(!StringUtils.isBlank(code)){  //验证码登陆
             //验证 验证码
+            String verify = smsTemplate.verify(phone, code);
+            if(!verify.equals("OK")){
+                return R.error(verify);
+            }
             //通过查询用户
             UserEntity userEntity = selectPhone(phone);
             return returnUserData(userEntity);
         }else if(!StringUtils.isBlank(password)){  //密码登陆
-            UserEntity userEntity = selectPhone(phone);
-            if(userEntity.getUserPassword().equals(password)){
+            UserEntity userEntity = selectPhoneAndPassWord(phone,password);
+            if(userEntity==null){
+                return R.error("密码错误");
+            }else{
                 return returnUserData(userEntity);
             }
         }
@@ -567,6 +584,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     private UserEntity selectPhone(String phone){
         QueryWrapper<UserEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_mobile",phone);
+        return userMapper.selectOne(queryWrapper);
+    }
+
+
+    //根据手机号和密码查询用户
+    private UserEntity selectPhoneAndPassWord(String phone,String password){
+        QueryWrapper<UserEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_mobile",phone);
+        queryWrapper.and(new Consumer<QueryWrapper<UserEntity>>() {
+            @Override
+            public void accept(QueryWrapper<UserEntity> userEntityQueryWrapper) {
+                userEntityQueryWrapper.eq("user_password",password);
+            }
+        });
         return userMapper.selectOne(queryWrapper);
     }
 
