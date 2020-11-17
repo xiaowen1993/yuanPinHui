@@ -142,6 +142,60 @@ public class UserEntity implements Serializable {
     private Long sumTeamEnergySource;
 
 
+    /**
+     * 是否是省市区代理
+     */
+    private Integer isAdmin;
+
+    /**
+     * 省市区 级别
+     */
+    private Integer rank;
+
+
+    /**
+     * 城市三级联动表ID
+     */
+    private Integer zoneCode;
+
+    /**
+     * 城市三级联动表名称
+     */
+    private String zoneName;
+
+
+    public Integer getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Integer isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
+    public Integer getZoneCode() {
+        return zoneCode;
+    }
+
+    public void setZoneCode(Integer zoneCode) {
+        this.zoneCode = zoneCode;
+    }
+
+    public String getZoneName() {
+        return zoneName;
+    }
+
+    public void setZoneName(String zoneName) {
+        this.zoneName = zoneName;
+    }
+
     @Override
     public String toString() {
         return "UserEntity{" +

@@ -22,7 +22,8 @@ public interface IUserService extends IService<UserEntity> {
 
     R userLogin(P p) throws Exception;
 
-    void userUpgrade();
+
+    void userUpgrade(List<UserEntity> list);
 
     Boolean updateSumTeamEnergySource(List<String> userId, String performance);
 

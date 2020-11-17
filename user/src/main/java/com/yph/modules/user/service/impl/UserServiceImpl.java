@@ -3,13 +3,11 @@ package com.yph.modules.user.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.yph.constant.UserConstant;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yph.modules.user.entity.UserEntity;
 import com.yph.modules.user.mapper.UserMapper;
 import com.yph.modules.user.service.IUserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yph.modules.user.template.SmsTemplate;
-import com.yph.redis.service.RedisService;
 import com.yph.util.P;
 import com.yph.util.R;
 import com.yph.util.utli.JwtUtil;
@@ -40,9 +38,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     private SmsTemplate smsTemplate;
 
 
-
     //用户等级升级  降级
-    public void userUpgrade(){
+    @Override
+    public void userUpgrade(List<UserEntity> userEntities){
+        if(userEntities==null){
+            QueryWrapper<UserEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.ge("sum_team_energy_source",20000000);
+            userEntities = userMapper.selectList(queryWrapper);
+        }
         List<Integer> list1=new ArrayList<>();
         List<Integer> list2=new ArrayList<>();
         List<Integer> list3=new ArrayList<>();
@@ -57,9 +60,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
         List<UserEntity> demotion1=new ArrayList<>();
 
-        QueryWrapper<UserEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.ge("sum_team_energy_source",20000000);
-        List<UserEntity> userEntities = userMapper.selectList(queryWrapper);
+
         //判断升级的用户
         for (UserEntity userEntity : userEntities) {
             if(userEntity.getUserLevel()==0&&userEntity.getSumTeamEnergySource()>=20000000){
@@ -93,7 +94,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         if(demotion1.size()>0){
             for (UserEntity userEntity : demotion1) {
                 if(userEntity.getSumTeamEnergySource()>=20000000&&userEntity.getSumTeamEnergySource()<50000000){
-                   list1.add(userEntity.getUserId());
+                    list1.add(userEntity.getUserId());
                 }else if(userEntity.getSumTeamEnergySource()>=50000000&&userEntity.getSumTeamEnergySource()<200000000&&userEntity.getUserLevel()==3){
                     list2.add(userEntity.getUserId());
                     demotion2.add(userEntity);
@@ -376,6 +377,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     }
 
 
+
     //修改用户等级
     private Boolean updateUserRank(String userId,Integer rank){
         UpdateWrapper<UserEntity> updateWrapper=new UpdateWrapper<>();
@@ -428,11 +430,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
     @Override
     public R selectUserBySuperior(P p) {
+        Map<String,List<UserEntity>> map=new HashMap<>();
         Integer userId = p.getInt("userId");
         Integer userRank = p.getInt("userRank");
         UserEntity userEntity = userMapper.selectById(userId);
         String relation = userEntity.getRelation();
         List<UserEntity> lists=new ArrayList<>();
+        List<UserEntity> zones=new ArrayList<>();
         if(!StringUtils.isBlank(relation)){
             String[] split = relation.split(",");
             QueryWrapper<UserEntity> queryWrapper=new QueryWrapper<>();
@@ -440,6 +444,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
             queryWrapper.orderByDesc("user_id");
             List<UserEntity> userEntities = userMapper.selectList(queryWrapper);
             for (UserEntity entity : userEntities) {
+                if(entity.getIsAdmin()!=null&&entity.getIsAdmin()!=0){
+                    zones.add(entity);
+                }
                 if(entity.getUserLevel()!=0){
                     if(userRank!=null&&entity.getUserLevel()>=userRank){
                         lists.add(entity);
@@ -449,7 +456,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
                 }
             }
         }
-        return R.success().data(lists);
+        map.put("userLevel",lists);
+        map.put("zones",zones);
+        return R.success().data(map);
     }
 
     @Override

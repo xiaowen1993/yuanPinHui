@@ -66,7 +66,7 @@ public class TestUser {
     //测试升级降级
     @Test
     public void testUserUpgrade(){
-        userService.userUpgrade();
+        userService.userUpgrade(null);
     }
 
 }

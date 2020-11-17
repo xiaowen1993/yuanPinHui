@@ -50,6 +50,40 @@ public class MqConfig {
     }
 
 
+    @Bean
+    public DirectExchange teamEnergySumExchange() {
+        return new DirectExchange(MqParameterEnum.TeamEnergySumQueue.getExchangeName());
+    }
+
+    @Bean
+    public Queue teamEnergySumQueue() {
+        //名字  是否持久化
+        return new Queue(MqParameterEnum.TeamEnergySumQueue.getQueueName(), true);
+    }
+
+    @Bean
+    public Binding teamEnergySumBinding() {
+        //绑定一个队列  to: 绑定到哪个交换机上面 with：绑定的路由建（routingKey）
+        return BindingBuilder.bind(teamEnergySumQueue()).to(teamEnergySumExchange()).with(MqParameterEnum.TeamEnergySumQueue.getExchangeKeyName());
+    }
+
+    @Bean
+    public DirectExchange levelUpExchange() {
+        return new DirectExchange(MqParameterEnum.LevelUp.getExchangeName());
+    }
+
+    @Bean
+    public Queue levelUpQueue() {
+        //名字  是否持久化
+        return new Queue(MqParameterEnum.LevelUp.getQueueName(), true);
+    }
+
+    @Bean
+    public Binding levelUpBinding() {
+        //绑定一个队列  to: 绑定到哪个交换机上面 with：绑定的路由建（routingKey）
+        return BindingBuilder.bind(levelUpQueue()).to(levelUpExchange()).with(MqParameterEnum.LevelUp.getExchangeKeyName());
+    }
+
 
     @Bean
     public DirectExchange allocationExchange() {

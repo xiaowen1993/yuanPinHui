@@ -10,5 +10,7 @@ public class MqParamter {
 
     public  static  final  String ALLOCATION_QUEUE_NAME = "allocationQueue";
 
+    public static final String TEAM_ENERGY_SUM_QUEUE ="teamEnergySumQueue";
 
+    public static final String LEVEL_UP_QUEUE  ="levelUpQueue";
 }
