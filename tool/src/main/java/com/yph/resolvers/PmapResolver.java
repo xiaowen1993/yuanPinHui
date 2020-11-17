@@ -8,7 +8,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.annotation.RequestParamMapMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -33,8 +32,8 @@ public class PmapResolver extends RequestParamMapMethodArgumentResolver {
         HttpServletRequest nativeRequest = webRequest.getNativeRequest(HttpServletRequest.class);
         p.setRequest(nativeRequest);
         p.setResponse(nativeResponse);
-        Cookie[] cookies = nativeRequest.getCookies();
-
+//        Cookie[] cookies = nativeRequest.getCookies();
+        p.setCookies(nativeRequest.getCookies());
         if(nativeRequest.getAttribute("userId")!=null){
             Object userId = nativeRequest.getAttribute("userId");
             p.put("userId",Integer.valueOf(String.valueOf(userId)));
@@ -47,6 +46,7 @@ public class PmapResolver extends RequestParamMapMethodArgumentResolver {
 //            p.put("rowIndex", (page - 1) * limit);
 //        RequestThreadLocal.REQUEST_THREAD_LOCAL.set(nativeRequest);
 //        p.batchToInt("limit","page");
+
         return p;
     }
 }

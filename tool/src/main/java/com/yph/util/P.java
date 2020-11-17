@@ -1,5 +1,6 @@
 package com.yph.util;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -12,6 +13,31 @@ import java.util.*;
 public class P extends HashMap<String,Object> {
 
     private HttpServletRequest request;
+
+
+
+    private Cookie[] cookies;
+
+
+
+    public  String getCookieValue(String name){
+
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(name)) {
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+
+
+    public Cookie[] getCookies() {
+        return cookies;
+    }
+
+    public void setCookies(Cookie[] cookies) {
+        this.cookies = cookies;
+    }
 
     public HttpServletRequest getRequest() {
         return request;

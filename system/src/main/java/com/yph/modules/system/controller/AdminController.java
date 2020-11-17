@@ -7,17 +7,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yph.annotation.Pmap;
 import com.yph.modules.system.entity.AdminEntity;
 import com.yph.modules.system.service.AdminService;
+import com.yph.redis.service.RedisService;
 import com.yph.util.P;
 import com.yph.util.R;
-import com.yph.util.StringUtil;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * <p>
@@ -33,12 +29,15 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    RedisService redisService;
+
     /**
      * 登录
      * @param p
      * @return
      */
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
     public R login(@Pmap P p){
         String adminName = p.getString("adminName");
         String adminPassword = p.getString("adminPassword");
@@ -48,7 +47,11 @@ public class AdminController {
             if(AdminEntityOne.getAdminPassword().equals(adminPassword)) {
                 //判断当前账号是否可用
                 if(AdminEntityOne.getActivation().equals(1)){
-                    return R.success("登录成功");
+                    //生成uuid
+                    String id = AdminEntityOne.getAdminId()+AdminEntityOne.getAdminName();
+                    //将对象放入redis
+                    redisService.set(id,AdminEntityOne);
+                    return R.success("登录成功").data(id);
                 }else {
                     return R.success("当前账号不可使用，请前往激活");
                 }
