@@ -25,4 +25,32 @@ public class BigDecimalUtil {
     }
 
 
+    public static BigDecimal divide100(Integer size){
+        BigDecimal bigDecimal=new BigDecimal("100");
+        BigDecimal bigDecimal1 = new BigDecimal(size + "");
+        BigDecimal divide1 = bigDecimal1.divide(bigDecimal);
+        return divide1;
+    }
+
+
+    public static BigDecimal multiply100(Integer size){
+        BigDecimal bigDecimal=new BigDecimal("100");
+        BigDecimal multiply = bigDecimal.multiply(new BigDecimal(size + ""));
+        return multiply;
+    }
+
+    public static BigDecimal divide100(String size){
+        BigDecimal bigDecimal=new BigDecimal("100");
+        BigDecimal bigDecimal1 = new BigDecimal(size);
+        BigDecimal divide1 = bigDecimal1.divide(bigDecimal);
+        return divide1;
+    }
+
+
+    public static BigDecimal multiply100(String size){
+        BigDecimal bigDecimal=new BigDecimal("100");
+        BigDecimal multiply = bigDecimal.multiply(new BigDecimal(size));
+        return multiply;
+    }
+
 }

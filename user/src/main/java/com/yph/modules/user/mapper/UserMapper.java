@@ -19,4 +19,5 @@ public interface UserMapper extends BaseMapper<UserEntity> {
 
     List<UserEntity> selectUserByReferrer(String upgrade4Id);
 
+    Integer selectSumLifeSource();
 }

@@ -10,6 +10,7 @@ import com.yph.modules.user.entity.UserEntity;
 import com.yph.modules.user.mapper.UserMapper;
 import com.yph.modules.user.service.IUserService;
 import com.yph.modules.user.template.SmsTemplate;
+import com.yph.util.BigDecimalUtil;
 import com.yph.util.P;
 import com.yph.util.R;
 import com.yph.util.utli.JwtUtil;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -546,6 +548,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     }
 
     @Override
+    public R getUserById(P p) throws Exception {
+        UserEntity userId = getById(p.getInt("userId"));
+        return returnUserData(userId);
+    }
+
+    @Override
+    public R addLifeSource(P p) {
+        Integer size = p.getInt("size");
+        size = BigDecimalUtil.multiply100(size).intValue();
+        String userId = p.getString("userId");
+        UpdateWrapper<UserEntity> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.setSql("life_source=life_source+"+size);
+        updateWrapper.eq("user_id",userId);
+        update(updateWrapper);
+        Integer lifeSourceSize=userMapper.selectSumLifeSource();
+        return R.success().data(lifeSourceSize);
+    }
+
+    @Override
     public R sendNote(P p) throws UnsupportedEncodingException {
         return R.success(smsTemplate.sendNote(p.getString("templateCode"),p.getString("phone")));
     }
@@ -684,6 +705,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
     //返回用户信息
     private R returnUserData(UserEntity userEntity) throws Exception {
+        if(userEntity==null){
+            return R.error("无此用户");
+        }
         String jwt = JwtUtil.createJWT(UUID.randomUUID().toString(), JSON.toJSONString(userEntity.getUserId()));
         userEntity.setUserId(null);
         return R.success().data(userEntity).set("token",jwt);

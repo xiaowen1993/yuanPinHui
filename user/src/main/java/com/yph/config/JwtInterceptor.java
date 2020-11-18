@@ -54,8 +54,8 @@ public class JwtInterceptor extends HandlerInterceptorAdapter{
         // 验证token是否有效--无效已做异常抛出，由全局异常处理后返回对应信息
         Claims claims = JwtUtil.parseJWT(authHeader);
         String subject = claims.getSubject();
-        UserEntity userEntity = JSON.parseObject(subject, UserEntity.class);
-        request.setAttribute("userId",userEntity.getUserId());
+        String userId = JSON.parseObject(subject, String.class);
+        request.setAttribute("userId",userId);
         return true;
     }
 

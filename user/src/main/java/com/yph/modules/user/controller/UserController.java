@@ -12,11 +12,7 @@ import com.yph.util.utli.ValidateUtli;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -45,6 +41,11 @@ public class UserController {
         return userService.sendNote(p);
     }
 
+
+    @RequestMapping("/selectUserById")
+    public R selectUserById(@Pmap P p) throws Exception {
+        return userService.getUserById(p);
+    }
 
     /**
      *  String phone  手机号
@@ -94,6 +95,14 @@ public class UserController {
         ValidateUtli.validateParams(p,"zoneCode","rank");
         return userService.addZoneCode(p);
     }
+
+    //添加生命源
+    @RequestMapping("/addLifeSource")
+    public R addLifeSource(@Pmap P p) throws Exception {
+        ValidateUtli.validateParams(p,"size");
+        return userService.addLifeSource(p);
+    }
+
 
 
     @RequestMapping("/test")

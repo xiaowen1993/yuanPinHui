@@ -2,6 +2,7 @@ package com.yph.enun;
 
 import com.yph.redis.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
