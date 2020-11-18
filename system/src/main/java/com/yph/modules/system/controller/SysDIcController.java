@@ -3,6 +3,7 @@ package com.yph.modules.system.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.injector.methods.UpdateById;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yph.annotation.Pmap;
 import com.yph.modules.system.entity.SysConfigEntity;
@@ -47,7 +48,7 @@ public class SysDIcController {
     /**
      * 删除字典
      */
-    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    @RequestMapping(value = "/delete")
     public R delete(@Pmap P p){
         if(dictService.removeById(p.getInt("dict_id"))) {
             return R.success("success");
@@ -58,15 +59,15 @@ public class SysDIcController {
     /**
      * 修改字典
      */
-    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    @RequestMapping(value = "/update")
     public R update(@Pmap P p) throws Exception {
         SysDictEntity sysDictEntity = p.thisToEntity(SysDictEntity.class);
-        return R.success("success",dictService.updateById(sysDictEntity));
+        return R.success("success", dictService.updateById(sysDictEntity));
     }
     /**
      * 增加字典
      */
-    @RequestMapping(value = "/save",method = RequestMethod.POST)
+    @RequestMapping(value = "/save")
     public R save(@Pmap P p) throws Exception {
         SysDictEntity sysDictEntity = p.thisToEntity(SysDictEntity.class);
         if (p.getInt("status").equals("on")){

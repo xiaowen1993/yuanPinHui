@@ -40,10 +40,6 @@ public class SysDictEntity implements Serializable {
      */
     private String name;
 
-    /**
-     * 上级代码id
-     */
-    private Integer parentId;
 
     /**
      * 状态（字典）
@@ -112,14 +108,6 @@ public class SysDictEntity implements Serializable {
         this.name = name;
         return this;
     }
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public SysDictEntity setParentId(Integer parentId) {
-        this.parentId = parentId;
-        return this;
-    }
 
     public Integer getStatus() {
         return status;
@@ -185,7 +173,6 @@ public class SysDictEntity implements Serializable {
             ", dictTypeId=" + dictTypeId +
             ", code=" + code +
             ", name=" + name +
-            ", parentId=" + parentId +
             ", status=" + status +
             ", sort=" + sort +
             ", description=" + description +
