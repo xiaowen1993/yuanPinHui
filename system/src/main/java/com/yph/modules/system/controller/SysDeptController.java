@@ -4,6 +4,7 @@ package com.yph.modules.system.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mysql.cj.util.StringUtils;
 import com.yph.annotation.Pmap;
 import com.yph.modules.system.entity.AdminEntity;
 import com.yph.modules.system.entity.SysDeptEntity;
@@ -63,8 +64,8 @@ public class SysDeptController {
         Page<SysDeptEntity> objectPage = new Page<>(p.getInt("page"),p.getInt("limit"));
         p.removeByKey(p);
         Page<SysDeptEntity> pageObject = sysDeptService.page(objectPage,new QueryWrapper<SysDeptEntity>()
-                .eq("simple_name", p.getString("simpleName"))
-                .eq("full_name", p.getString("fullName"))
+                .eq(!StringUtils.isNullOrEmpty(p.getString("simpleName")),"simple_name", p.getString("simpleName"))
+                .eq(!StringUtils.isNullOrEmpty(p.getString("fullName")),"full_name", p.getString("fullName"))
         );
         return R.success("success",pageObject.getRecords()).set("count",pageObject.getTotal());
     }

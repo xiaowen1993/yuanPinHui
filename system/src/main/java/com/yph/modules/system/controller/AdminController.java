@@ -4,6 +4,7 @@ package com.yph.modules.system.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mysql.cj.util.StringUtils;
 import com.yph.annotation.Pmap;
 import com.yph.modules.system.entity.AdminEntity;
 import com.yph.modules.system.service.AdminService;
@@ -101,9 +102,9 @@ public class AdminController {
         Page<AdminEntity> objectPage = new Page<>(p.getInt("page"),p.getInt("limit"));
         p.removeByKey(p);
         Page<AdminEntity> pageObject = adminService.page(objectPage,new QueryWrapper<AdminEntity>()
-                .eq("admin_name", p.getString("adminName"))
-                .eq("admin_nikename", p.getString("adminNikename"))
-                .eq("activation", p.getString("activation"))
+                .eq(!StringUtils.isNullOrEmpty(p.getString("adminName")),"admin_name", p.getString("adminName"))
+                .eq(!StringUtils.isNullOrEmpty(p.getString("adminNikename")),"admin_nikename", p.getString("adminNikename"))
+                .eq(!StringUtils.isNullOrEmpty(p.getString("activation")),"activation", p.getString("activation"))
         );
         return R.success("success",pageObject.getRecords()).set("count",pageObject.getTotal());
     }
