@@ -3,6 +3,7 @@ package com.yph.modules.system.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yph.annotation.Jurisdiction;
 import com.yph.annotation.Pmap;
 import com.yph.enun.AdminRoleEnum;
@@ -57,8 +58,10 @@ public class RoleController {
      * @return
      */
     @RequestMapping(value = "/list",method = RequestMethod.GET)
-    public R list(){
-        return R.success().data(sysRoleService.list());
+    public R list(@Pmap P p){
+        p.initPageArg();
+        Page<SysRoleEntity> page = new Page<>(p.getInt("page"),p.getInt("limit"));
+        return R.success().data(sysRoleService.page(page));
     }
 
 

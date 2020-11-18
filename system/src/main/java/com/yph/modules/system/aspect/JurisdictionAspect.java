@@ -1,8 +1,10 @@
 package com.yph.modules.system.aspect;
 
 import com.alibaba.spring.util.AnnotationUtils;
+import com.yph.annotation.Jurisdiction;
 import com.yph.annotation.Pmap;
 import com.yph.enun.AdminRoleEnum;
+import com.yph.enun.JurisdictionEnum;
 import com.yph.modules.system.entity.AdminEntity;
 import com.yph.modules.system.service.SysAdminRoleService;
 import com.yph.modules.system.service.SysMenuService;
@@ -50,6 +52,7 @@ public class JurisdictionAspect {
         MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();
         P p = null;
         Method method = signature.getMethod();
+        Jurisdiction jurisdiction=method.getAnnotation(Jurisdiction.class);
         for (int i = 0; i < method.getParameters().length; i++) {
             if (method.getParameters()[i].isAnnotationPresent(Pmap.class)) {
                 p = (P) proceedingJoinPoint.getArgs()[i];
@@ -68,6 +71,13 @@ public class JurisdictionAspect {
         String uri = getUri(annotations);
         System.out.println(uri);
         AdminEntity adminEntity = redisService.get(p.getCookieValue(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY), AdminEntity.class);
+
+        if (jurisdiction.jurisdictionNumber().getCont().equals(JurisdictionEnum.JURISDICTION_ADMIN.getCont())){
+            if (adminEntity.getAdminLevel().equals(JurisdictionEnum.JURISDICTION_ADMIN.getCode()+"")){
+                return proceedingJoinPoint.proceed(proceedingJoinPoint.getArgs());
+            }
+        }
+
         List list = redisService.get(AdminRoleEnum.ADMIN_ROLE_REDIS + adminEntity.getAdminName(), List.class);
         for (Object o : list) {
             if (o.toString().equals(uri)){

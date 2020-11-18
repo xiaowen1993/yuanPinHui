@@ -101,9 +101,10 @@ public class SysMenuController {
      * @throws Exception
      */
     @RequestMapping(value = "/update",method = RequestMethod.POST)
-    public boolean update(@Pmap P p) throws Exception{
+    public R update(@Pmap P p) throws Exception{
         SysMenuEntity sysMenuEntity = p.thisToEntity(SysMenuEntity.class);
-        return menuService.updateById(sysMenuEntity);
+        menuService.updateById(sysMenuEntity);
+        return R.success();
     }
 
 

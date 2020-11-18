@@ -5,8 +5,8 @@ package com.yph.enun;
  */
 public enum JurisdictionEnum {
 
-    JURISDICTION_COMMON(0,"COMMON"),
-    JURISDICTION_ADMIN(1,"ADMIN")
+    JURISDICTION_COMMON(1,"COMMON"),
+    JURISDICTION_ADMIN(0,"ADMIN")
     ;
 
     private  int code;

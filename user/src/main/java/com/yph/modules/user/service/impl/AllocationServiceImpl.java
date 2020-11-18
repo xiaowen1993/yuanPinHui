@@ -28,6 +28,10 @@ public class AllocationServiceImpl implements AllocationService {
     @Autowired
     IUserService userService;
 
+
+    @Autowired
+    SystemParameter systemParameter;
+
     /**
      * 伞下分红  共6级
      *
@@ -59,7 +63,7 @@ public class AllocationServiceImpl implements AllocationService {
             String zhiTui = map.get("zhiTui") == null ? null : (String) map.get("zhiTui");
             String jianTui = map.get("jianTui") == null ? null : (String) map.get("jianTui");
             if (zhiTui != null) {
-                BigDecimal multiply = BigDecimalUtil.multiply(new BigDecimal(energySource.toString()), SystemParameter.directPush);
+                BigDecimal multiply = BigDecimalUtil.multiply(new BigDecimal(energySource.toString()), systemParameter.getDirectPush());
                 if (multiply.doubleValue() > 0) {
                     //直推分红
                     updateMoney(Integer.parseInt(zhiTui),multiply);
@@ -67,7 +71,7 @@ public class AllocationServiceImpl implements AllocationService {
             }
 
             if (jianTui != null) {
-                BigDecimal multiply = BigDecimalUtil.multiply(new BigDecimal(energySource.toString()), SystemParameter.indirectPush);
+                BigDecimal multiply = BigDecimalUtil.multiply(new BigDecimal(energySource.toString()), systemParameter.getIndirectPush());
                 if (multiply.doubleValue() > 0) {
                     //间推分红
                     updateMoney(Integer.parseInt(jianTui),multiply);

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 public class LoginController {
 
@@ -26,7 +28,8 @@ public class LoginController {
         R login = adminServiceClient.login(adminName, adminPassword);
         int code = Integer.parseInt(login.get("code").toString());
         if (code==0){
-            ResponseCookie build = ResponseCookie.from(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY, login.get("data").toString()).path("/").build();
+            Map map=(Map) login.get("data");
+            ResponseCookie build = ResponseCookie.from(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY, map.get("id").toString()).path("/").build();
             response.addCookie(build);
         }
 

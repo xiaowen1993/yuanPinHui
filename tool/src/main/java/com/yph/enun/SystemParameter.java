@@ -1,19 +1,71 @@
 package com.yph.enun;
 
+import com.yph.redis.service.RedisService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Agu
  */
+@Component
 public class SystemParameter {
 
 
+    @Autowired
+    RedisService redisService;
+
     //生命源转换能量源的比率
-    public   static BigDecimal LifeSourceToEEnergyRate = new BigDecimal("0.01");
+    public  BigDecimal LifeSourceToEEnergyRate;
 
     //直推
-    public  static  BigDecimal directPush = new BigDecimal("0.3");
+    public  BigDecimal directPush;
    //  间推
-    public  static  BigDecimal indirectPush = new BigDecimal("0.1");
+    public  BigDecimal indirectPush;
 
+    public Map getSystemParameterAll(){
+        return redisService.get("SystemParameter", HashMap.class);
+    }
+
+    public void AddOrUpdateSystemParameter(String key,Object value){
+        Map<String,Object> systemParameterAll=getSystemParameterAll();
+        systemParameterAll.put(key,value);
+        redisService.set("SystemParameter",systemParameterAll);
+    }
+
+
+
+    public BigDecimal getLifeSourceToEEnergyRate() {
+        Map systemParameterAll = getSystemParameterAll();
+        return new BigDecimal(systemParameterAll.get("LifeSourceToEEnergyRate").toString());
+
+    }
+
+
+    public void setLifeSourceToEEnergyRate(BigDecimal lifeSourceToEEnergyRate) {
+        AddOrUpdateSystemParameter("LifeSourceToEEnergyRate",lifeSourceToEEnergyRate);
+    }
+
+    public BigDecimal getDirectPush() {
+        Map systemParameterAll = getSystemParameterAll();
+        return new BigDecimal(systemParameterAll.get("directPush").toString());
+
+    }
+
+    public void setDirectPush(BigDecimal directPush) {
+        AddOrUpdateSystemParameter("directPush",directPush);
+    }
+
+    public BigDecimal getIndirectPush() {
+        Map systemParameterAll = getSystemParameterAll();
+        return new BigDecimal(systemParameterAll.get("indirectPush").toString());
+
+    }
+
+    public void setIndirectPush(BigDecimal indirectPush) {
+        AddOrUpdateSystemParameter("indirectPush",indirectPush);
+    }
 }

@@ -7,14 +7,12 @@ import com.yph.enun.MqParameterEnum;
 import com.yph.enun.SystemParameter;
 import com.yph.modules.user.entity.UserEntity;
 import com.yph.modules.user.execute.LifeSourceExecute;
-import com.yph.modules.user.mapper.UserMapper;
 import com.yph.modules.user.service.IUserService;
 import com.yph.util.MqUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +28,9 @@ public class SystemLifeSourceExecute implements LifeSourceExecute {
     @Autowired
     MqUtil mqUtil;
 
+    @Autowired
+    SystemParameter systemParameter;
+
     @Override
     public void LifeSourceToEnergy() {
         QueryWrapper<UserEntity> queryWrapper = new QueryWrapper();
@@ -43,7 +44,7 @@ public class SystemLifeSourceExecute implements LifeSourceExecute {
             //生命源转化成的能量源
             BigDecimal energy = null;
             try {
-                energy  = lifeBig.multiply(SystemParameter.LifeSourceToEEnergyRate).setScale(0);
+                energy  = lifeBig.multiply(systemParameter.getLifeSourceToEEnergyRate()).setScale(0);
             }catch (ArithmeticException e){
                 //小于0
                 energy = new BigDecimal("0");

@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yph.annotation.Pmap;
 import com.yph.modules.system.entity.AdminEntity;
 import com.yph.modules.system.service.AdminService;
-import com.yph.param.RedisParamenter;
 import com.yph.redis.service.RedisService;
 import com.yph.util.P;
 import com.yph.util.R;
@@ -15,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -49,10 +51,14 @@ public class AdminController {
                 //判断当前账号是否可用
                 if(AdminEntityOne.getActivation().equals(1)){
                     //生成uuid
+                    AdminEntityOne.setAdminPassword(null);
                     String id = AdminEntityOne.getAdminId()+AdminEntityOne.getAdminName();
+                    Map<String,Object> map=new HashMap<>();
+                    map.put("id",id);
+                    map.put("entity",AdminEntityOne);
                     //将对象放入redis
                     redisService.set(id,AdminEntityOne);
-                    return R.success("登录成功").data(id);
+                    return R.success("登录成功").data(map);
                 }else {
                     return R.success("当前账号不可使用，请前往激活");
                 }

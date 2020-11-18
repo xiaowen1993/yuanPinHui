@@ -2,14 +2,12 @@ package com.yph.modules.system.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yph.annotation.Pmap;
+import com.yph.enun.SystemParameter;
 import com.yph.modules.system.entity.SysConfigEntity;
-import com.yph.modules.system.entity.SysDeptEntity;
-import com.yph.modules.system.entity.SysDictEntity;
 import com.yph.modules.system.service.SysConfigService;
-import com.yph.modules.system.service.SysDictService;
+import com.yph.redis.service.RedisService;
 import com.yph.util.P;
 import com.yph.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +26,26 @@ public class SysConfigController {
 
     @Autowired
     private SysConfigService sysConfigService;
+
+    @Autowired
+    private SystemParameter parameter;
+
+
+    @Autowired
+    private RedisService redisService;
+
+
+    @RequestMapping(value = "/sysList",method = RequestMethod.GET)
+    public R SystemList(@Pmap P p)throws Exception{
+        return R.success().data(parameter.getLifeSourceToEEnergyRate());
+    }
+
+
+    @RequestMapping(value = "/addOrUpdate",method = RequestMethod.POST)
+    public R SystemAddOrUpdate(@Pmap P p)throws Exception{
+        parameter.AddOrUpdateSystemParameter(p.getString("name"),p.getString("value"));
+        return R.success();
+    }
 
     /**
      * 查询系统配置
