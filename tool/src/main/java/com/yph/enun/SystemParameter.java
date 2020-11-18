@@ -26,13 +26,28 @@ public class SystemParameter {
    //  间推
     public  BigDecimal indirectPush;
 
+    /**
+     * 得到所有的值
+     * @return
+     */
     public Map getSystemParameterAll(){
         return redisService.get("SystemParameter", HashMap.class);
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void AddOrUpdateSystemParameter(String key,Object value){
         Map<String,Object> systemParameterAll=getSystemParameterAll();
         systemParameterAll.put(key,value);
+        redisService.set("SystemParameter",systemParameterAll);
+    }
+
+    public void delete(String key){
+        Map<String,Object> systemParameterAll=getSystemParameterAll();
+        systemParameterAll.remove(key);
         redisService.set("SystemParameter",systemParameterAll);
     }
 

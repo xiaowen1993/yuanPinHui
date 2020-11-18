@@ -37,13 +37,20 @@ public class SysConfigController {
 
     @RequestMapping(value = "/sysList",method = RequestMethod.GET)
     public R SystemList(@Pmap P p)throws Exception{
-        return R.success().data(parameter.getLifeSourceToEEnergyRate());
+        return R.success().data(parameter.getSystemParameterAll());
     }
 
 
     @RequestMapping(value = "/addOrUpdate",method = RequestMethod.POST)
     public R SystemAddOrUpdate(@Pmap P p)throws Exception{
         parameter.AddOrUpdateSystemParameter(p.getString("name"),p.getString("value"));
+        return R.success();
+    }
+
+
+    @RequestMapping(value = "/configDelete",method = RequestMethod.POST)
+    public R configDelete(@Pmap P p)throws Exception{
+        parameter.delete(p.getString("name"));
         return R.success();
     }
 
