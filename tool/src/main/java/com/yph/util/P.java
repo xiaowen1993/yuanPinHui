@@ -149,10 +149,10 @@ public class P extends HashMap<String,Object> {
      * @param map
      */
     public void removeByKey(Map map){
-        Iterator<Entry<String, String>> iterator  = map.entrySet().iterator();
+        Iterator<Entry<String, Object>> iterator  = map.entrySet().iterator();
         while (iterator.hasNext()) {
-            Entry<String, String> entry = iterator.next();
-            String value = entry.getValue();
+            Entry<String, Object> entry = iterator.next();
+            Object value = entry.getValue();
             if("".equals(value)||null==value){
                 iterator.remove();
             }
@@ -165,10 +165,10 @@ public class P extends HashMap<String,Object> {
      * page:0 & limit:10 是mybatis plus  Page 当中的默认值
      */
     public void initPageArg(){
-        if (this.get("page") == null) {
+        if (this.get("page") == null||this.get("page").equals("")) {
             this.put("page",0);
         }
-        if (this.get("limit") == null) {
+        if (this.get("limit") == null||this.get("limit").equals("")) {
             this.put("limit",10);
         }
     }
