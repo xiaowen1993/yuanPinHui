@@ -79,6 +79,9 @@ public class JurisdictionAspect {
         }
 
         List list = redisService.get(AdminRoleEnum.ADMIN_ROLE_REDIS + adminEntity.getAdminName(), List.class);
+        if (list==null){
+            return R.error("无权限");
+        }
         for (Object o : list) {
             if (o.toString().equals(uri)){
                 return proceedingJoinPoint.proceed(proceedingJoinPoint.getArgs());
