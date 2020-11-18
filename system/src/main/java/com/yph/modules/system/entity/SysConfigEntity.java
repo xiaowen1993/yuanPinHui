@@ -36,24 +36,19 @@ public class SysConfigEntity implements Serializable {
     private String code;
 
     /**
-     * 是否是字典中的值
-     */
-    private String dictFlag;
-
-    /**
      * 字典类型的编码
      */
     private Integer dictTypeId;
 
     /**
-     * 属性值，如果是字典中的类型，则为dict的code
-     */
-    private String value;
-
-    /**
      * 备注
      */
     private String remark;
+
+    /**
+     * 排序
+     */
+    private Integer sort;
 
     /**
      * 创建时间
@@ -75,22 +70,6 @@ public class SysConfigEntity implements Serializable {
      */
     private Integer updateUser;
 
-    @Override
-    public String toString() {
-        return "SysConfigEntity{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", code='" + code + '\'' +
-                ", dictFlag='" + dictFlag + '\'' +
-                ", dictTypeId=" + dictTypeId +
-                ", value='" + value + '\'' +
-                ", remark='" + remark + '\'' +
-                ", createTime=" + createTime +
-                ", createUser=" + createUser +
-                ", updateTime=" + updateTime +
-                ", updateUser=" + updateUser +
-                '}';
-    }
 
     public Integer getId() {
         return id;
@@ -116,28 +95,12 @@ public class SysConfigEntity implements Serializable {
         this.code = code;
     }
 
-    public String getDictFlag() {
-        return dictFlag;
-    }
-
-    public void setDictFlag(String dictFlag) {
-        this.dictFlag = dictFlag;
-    }
-
     public Integer getDictTypeId() {
         return dictTypeId;
     }
 
     public void setDictTypeId(Integer dictTypeId) {
         this.dictTypeId = dictTypeId;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 
     public String getRemark() {
@@ -178,5 +141,29 @@ public class SysConfigEntity implements Serializable {
 
     public void setUpdateUser(Integer updateUser) {
         this.updateUser = updateUser;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    @Override
+    public String toString() {
+        return "SysConfigEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", dictTypeId=" + dictTypeId +
+                ", remark='" + remark + '\'' +
+                ", sort=" + sort +
+                ", createTime=" + createTime +
+                ", createUser=" + createUser +
+                ", updateTime=" + updateTime +
+                ", updateUser=" + updateUser +
+                '}';
     }
 }

@@ -46,11 +46,6 @@ public class SysDictTypeEntity implements Serializable {
     private Integer systemFlag;
 
     /**
-     * 状态(字典)
-     */
-    private String status;
-
-    /**
      * 排序
      */
     private Integer sort;
@@ -115,14 +110,7 @@ public class SysDictTypeEntity implements Serializable {
         this.systemFlag = systemFlag;
         return this;
     }
-    public String getStatus() {
-        return status;
-    }
 
-    public SysDictTypeEntity setStatus(String status) {
-        this.status = status;
-        return this;
-    }
     public Integer getSort() {
         return sort;
     }
@@ -172,7 +160,6 @@ public class SysDictTypeEntity implements Serializable {
             ", name=" + name +
             ", description=" + description +
             ", systemFlag=" + systemFlag +
-            ", status=" + status +
             ", sort=" + sort +
             ", createTime=" + createTime +
             ", createUser=" + createUser +
