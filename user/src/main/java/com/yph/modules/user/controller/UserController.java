@@ -55,7 +55,7 @@ public class UserController {
     @PassToken
     @RequestMapping("/userRegister")
     public R userRegister(@Pmap P p) throws Exception {
-        ValidateUtli.validateParams(p,"phone","password","code");
+        ValidateUtli.validateParams(p,"phone","password","code","inviterId");
         return  userService.userRegister(p);
     }
 
@@ -81,6 +81,15 @@ public class UserController {
     public R selectUserBySuperior(@Pmap P p) throws Exception {
         ValidateUtli.validateParams(p,"userId");
         return userService.selectUserBySuperior(p);
+    }
+
+
+    //添加省市区代理
+    @PassToken
+    @RequestMapping("/addZoneCode")
+    public R addZoneCode(@Pmap P p) throws Exception {
+        ValidateUtli.validateParams(p,"zoneCode","rank");
+        return userService.addZoneCode(p);
     }
 
 

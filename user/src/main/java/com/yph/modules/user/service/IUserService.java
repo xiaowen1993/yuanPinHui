@@ -37,4 +37,6 @@ public interface IUserService extends IService<UserEntity> {
     R sendNote(P p) throws UnsupportedEncodingException;
 
     R selectUserReferrerTo(Integer userId);
+
+    R addZoneCode(P p);
 }

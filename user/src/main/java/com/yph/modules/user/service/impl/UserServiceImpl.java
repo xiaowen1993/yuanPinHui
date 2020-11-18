@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yph.modules.china.entity.ChinaEntity;
+import com.yph.modules.china.service.IChinaService;
 import com.yph.modules.user.entity.UserEntity;
 import com.yph.modules.user.mapper.UserMapper;
 import com.yph.modules.user.service.IUserService;
@@ -15,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.util.*;
@@ -36,6 +39,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
     @Autowired
     private SmsTemplate smsTemplate;
+
+    @Autowired
+    private IChinaService chinaService;
 
 
     //用户等级升级  降级
@@ -471,6 +477,72 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         UserEntity userEntity = userMapper.selectById(userId);
         String relation = userEntity.getRelation();
         return R.success().data(userIdSubstring(relation));
+    }
+
+    @Transactional
+    @Override
+    public R addZoneCode(P p) {
+        Integer userId = p.getInt("userId");
+        Integer rank = p.getInt("rank");
+        UserEntity userEntity = userMapper.selectById(userId);
+        if(userEntity.getIsAdmin()!=null&&userEntity.getIsAdmin()!=0){
+            return R.error("已经成为代理，不能再更改");
+        }
+        String relation = userEntity.getRelation();
+        String[] split = relation.split(",");
+        QueryWrapper<UserEntity> queryWrapper=new QueryWrapper<>();
+        queryWrapper.in("user_id",Arrays.asList(split));
+        queryWrapper.orderByDesc("user_id");
+        List<UserEntity> userEntities = userMapper.selectList(queryWrapper);
+        UserEntity userEntity1=null;
+        for (UserEntity entity : userEntities) {
+            if(entity.getIsAdmin()==1){
+                userEntity1=entity;
+                break;
+            }
+        }
+        Integer zoneCode = p.getInt("zoneCode");
+        ChinaEntity chinaEntity = chinaService.getById(zoneCode);
+        if(chinaEntity==null){
+            return R.error("传入地区编码有误");
+        }
+        if(userEntity1==null){
+            if(rank==1){
+                //直接添加
+                UpdateWrapper<UserEntity> updateWrapper=new UpdateWrapper<>();
+                updateWrapper.set("is_admin",1);
+                updateWrapper.set("rank",rank);
+                updateWrapper.set("zone_code",chinaEntity.getId());
+                updateWrapper.set("zone_name",chinaEntity.getName());
+                update(updateWrapper);
+                return R.success();
+            }else{
+                return R.error("上级无省代理，不可直接添加市区代理");
+            }
+        }else{
+            //查询到了  有代理
+            Integer zoneCode1 = userEntity1.getZoneCode();
+            QueryWrapper<ChinaEntity> queryWrapper1=new QueryWrapper<>();
+            queryWrapper1.eq("Pid",zoneCode1);
+            List<ChinaEntity> list = chinaService.list(queryWrapper1);
+            boolean temp=false;
+            for (ChinaEntity entity : list) {
+                if(entity.getId()==zoneCode){
+                    temp=true;
+                    break;
+                }
+            }
+            if(!temp){
+                return R.error("您的最近上级为"+userEntity1.getZoneName()+"代理,您只能选择此地域以下的代理");
+            }
+            UpdateWrapper<UserEntity> updateWrapper=new UpdateWrapper<>();
+            updateWrapper.set("is_admin",1);
+            updateWrapper.set("rank",rank);
+            updateWrapper.set("zone_code",chinaEntity.getId());
+            updateWrapper.set("zone_name",chinaEntity.getName());
+            update(updateWrapper);
+            return R.success();
+        }
     }
 
     @Override
