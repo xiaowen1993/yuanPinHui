@@ -42,7 +42,7 @@ public class SystemLifeSourceExecute implements LifeSourceExecute {
             Long lifeSource = userEntity.getLifeSource();
             BigDecimal lifeBig = new BigDecimal(lifeSource.toString());
             //生命源转化成的能量源
-            BigDecimal energy = null;
+            BigDecimal energy ;
             try {
                 energy  = lifeBig.multiply(systemParameter.getLifeSourceToEEnergyRate()).setScale(0);
             }catch (ArithmeticException e){

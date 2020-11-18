@@ -4,6 +4,7 @@ package com.yph.modules.user.controller;
 import com.yph.annotation.PassToken;
 import com.yph.annotation.Pmap;
 import com.yph.modules.user.entity.UserEntity;
+import com.yph.modules.user.execute.LifeSourceExecute;
 import com.yph.modules.user.service.IUserService;
 import com.yph.util.P;
 import com.yph.util.R;
@@ -83,6 +84,8 @@ public class UserController {
         return userService.selectUserBySuperior(p);
     }
 
+    @Autowired
+    LifeSourceExecute lifeSourceExecute;
 
     //添加省市区代理
     @PassToken
@@ -93,5 +96,10 @@ public class UserController {
     }
 
 
+    @RequestMapping("/test")
+    public R test(){
+        lifeSourceExecute.LifeSourceToEnergy();
+        return R.success();
+    }
 
 }

@@ -230,9 +230,10 @@ public class UserEntity implements Serializable {
     public UserEntity() {
     }
 
-    public UserEntity(Integer userId, Integer userLevel) {
+    public UserEntity(Integer userId, Integer userLevel,Integer rank) {
         this.userId = userId;
         this.userLevel = userLevel;
+        this.rank = rank;
     }
 
     public Long getSumEnergySource() {
