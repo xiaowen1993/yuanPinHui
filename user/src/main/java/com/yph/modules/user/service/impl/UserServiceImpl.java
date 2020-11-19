@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -487,6 +486,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         Integer userId = p.getInt("userId");
         Integer rank = p.getInt("rank");
         UserEntity userEntity = userMapper.selectById(userId);
+        if(userEntity==null){
+            return R.error("此用户不存在");
+        }
         if(userEntity.getIsAdmin()!=null&&userEntity.getIsAdmin()!=0){
             return R.error("已经成为代理，不能再更改");
         }

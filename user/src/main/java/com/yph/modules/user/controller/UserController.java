@@ -3,7 +3,6 @@ package com.yph.modules.user.controller;
 
 import com.yph.annotation.PassToken;
 import com.yph.annotation.Pmap;
-import com.yph.modules.user.entity.UserEntity;
 import com.yph.modules.user.execute.LifeSourceExecute;
 import com.yph.modules.user.service.IUserService;
 import com.yph.util.P;
@@ -92,7 +91,7 @@ public class UserController {
     @PassToken
     @RequestMapping("/addZoneCode")
     public R addZoneCode(@Pmap P p) throws Exception {
-        ValidateUtli.validateParams(p,"zoneCode","rank");
+        ValidateUtli.validateParams(p,"zoneCode","rank","userId");
         return userService.addZoneCode(p);
     }
 
