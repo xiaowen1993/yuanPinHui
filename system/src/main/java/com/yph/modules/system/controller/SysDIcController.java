@@ -48,7 +48,7 @@ public class SysDIcController {
     /**
      * 删除字典
      */
-    @RequestMapping(value = "/delete")
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
     public R delete(@Pmap P p){
         if(dictService.removeById(p.getInt("dict_id"))) {
             return R.success("success");
@@ -59,7 +59,7 @@ public class SysDIcController {
     /**
      * 修改字典
      */
-    @RequestMapping(value = "/update")
+    @RequestMapping(value = "/update",method = RequestMethod.POST)
     public R update(@Pmap P p) throws Exception {
         SysDictEntity sysDictEntity = p.thisToEntity(SysDictEntity.class);
         return R.success("success", dictService.updateById(sysDictEntity));
@@ -67,7 +67,7 @@ public class SysDIcController {
     /**
      * 增加字典
      */
-    @RequestMapping(value = "/save")
+    @RequestMapping(value = "/save",method = RequestMethod.POST)
     public R save(@Pmap P p) throws Exception {
         SysDictEntity sysDictEntity = p.thisToEntity(SysDictEntity.class);
         if (p.getInt("status").equals("on")){
