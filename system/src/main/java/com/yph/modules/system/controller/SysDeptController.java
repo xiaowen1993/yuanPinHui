@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <p>
  *  前端控制器
@@ -68,6 +71,16 @@ public class SysDeptController {
                 .eq(!StringUtils.isNullOrEmpty(p.getString("fullName")),"full_name", p.getString("fullName"))
         );
         return R.success("success",pageObject.getRecords()).set("count",pageObject.getTotal());
+    }
+
+    /**
+     * 查询树形结构数据
+     * @param p
+     * @return
+     */
+    @RequestMapping(value = "/sysDeptTree",method = RequestMethod.GET)
+    public R sysDeptTree(@Pmap P p) throws Exception {
+        return sysDeptService.sysDeptTree(p);
     }
 
 
