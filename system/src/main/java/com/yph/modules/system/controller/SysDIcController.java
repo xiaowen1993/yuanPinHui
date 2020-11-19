@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 /**
  *字典
  * @author liu
@@ -62,6 +64,7 @@ public class SysDIcController {
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     public R update(@Pmap P p) throws Exception {
         SysDictEntity sysDictEntity = p.thisToEntity(SysDictEntity.class);
+        sysDictEntity.setUpdateTime(new Date());
         return R.success("success", dictService.updateById(sysDictEntity));
     }
     /**
@@ -75,6 +78,8 @@ public class SysDIcController {
         }else {
             p.put("status",1);
         }
+        sysDictEntity.setCreateTime(new Date());
+        sysDictEntity.setUpdateTime(new Date());
         return R.success("success",dictService.save(sysDictEntity));
     }
 
