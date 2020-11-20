@@ -99,7 +99,7 @@ public class MqConfig {
     @Bean
     public Binding allocationBinding() {
         //绑定一个队列  to: 绑定到哪个交换机上面 with：绑定的路由建（routingKey）
-        return BindingBuilder.bind(queue()).to(defaultExchange()).with(MqParameterEnum.AllocationQueue.getExchangeKeyName());
+        return BindingBuilder.bind(allocationQueue()).to(allocationExchange()).with(MqParameterEnum.AllocationQueue.getExchangeKeyName());
     }
 
 }

@@ -41,7 +41,8 @@ public class TeamEnergySumListener {
     @RabbitListener(queues = MqParamter.TEAM_ENERGY_SUM_QUEUE)
     public  void  get(Message message, Channel channel) throws Exception{
         List<String> ids=new ArrayList<>();
-        // userId , energySource , toUserId
+        System.out.println("aaaaaaaaaaaaaaa");
+        //energySource , toUserId , marking(是加还是减) 0加  1减
         Map<String,Object> data = JSONUtils.toMap(new String(message.getBody()));
         P p=new P(data);
         String toUserId = p.getString("toUserId");
@@ -50,22 +51,32 @@ public class TeamEnergySumListener {
         BigDecimal bigDecimal = BigDecimalUtil.multiply100(energySource);
         BigDecimal multiply = bigDecimal.multiply(systemParameter.getLifeSourceToEEnergyRate());
         energySource=multiply.toString();
-        updateUserSumTeamEnergySource(toUserId,energySource);  //此处不知道乘以多少，这个值是动态的
-        mqUtil.testSend(MqParameterEnum.LevelUp.getExchangeName(),MqParameterEnum.LevelUp.getExchangeKeyName(),ids);
+        String marking = p.getString("marking");
+        if(marking.equals("1")){
+            energySource="-"+energySource;
+        }else{
+            energySource="+"+energySource;
+        }
+        List<String> strings = updateUserSumTeamEnergySource(toUserId, energySource);//此处不知道乘以多少，这个值是动态的
+        mqUtil.testSend(MqParameterEnum.LevelUp.getExchangeName(),MqParameterEnum.LevelUp.getExchangeKeyName(),strings);
         channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
     }
 
 
-    private void updateUserSumTeamEnergySource(String toUserId,String energySource){
+    private List<String> updateUserSumTeamEnergySource(String toUserId,String energySource){
         UserEntity userEntity = userService.getById(toUserId);
         String relation = userEntity.getRelation();
         if(StringUtils.isBlank(relation)){
-            return;
+            return null;
         }
         String[] split = relation.split(",");
-        List<String> strings = Arrays.asList(split);
+        List<String> strings=new ArrayList<>();
+        for (String s : split) {
+            strings.add(s);
+        }
         strings.add(toUserId);  //加上自己
         userService.updateSumTeamEnergySource(strings,energySource);
+        return strings;
     }
 
 

@@ -44,4 +44,16 @@ public interface IUserService extends IService<UserEntity> {
     R getUserById(P p) throws Exception;
 
     R addLifeSource(P p);
+
+    R selectSumLifeSource(P p);
+
+    R lifeSourceToEnergySource(P p);
+
+    R energySourceToBean(P p);
+
+    R energySourceToLifeSource(P p);
+
+    R beanToEnergySource(P p);
+
+    R lifeSourceToLifeSource(P p);
 }

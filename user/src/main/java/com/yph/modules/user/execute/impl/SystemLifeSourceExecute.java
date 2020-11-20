@@ -53,6 +53,7 @@ public class SystemLifeSourceExecute implements LifeSourceExecute {
                 UpdateWrapper<UserEntity> userEntityUpdateWrapper =
                         new UpdateWrapper<UserEntity>().setSql("energy_source=energy_source+"+energy.longValue()).eq("user_id",userEntity.getUserId());
                 boolean update = userService.update(userEntityUpdateWrapper);
+                System.out.println("111");
                 if (update){
                     AllocationDto allocationDto = new AllocationDto(userEntity.getUserId(),energy.longValue(),userEntity.getUserLevel());
                     //发送给伞下分成处理

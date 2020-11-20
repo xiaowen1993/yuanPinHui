@@ -16,7 +16,7 @@ public class BigDecimalUtil {
         }
         BigDecimal bigDecimal = null;
         try {
-            bigDecimal = b1.multiply(b2).setScale(0);
+            bigDecimal = b1.multiply(b2).setScale(2);
          }catch (ArithmeticException e){
         //小于0
             bigDecimal = new BigDecimal("0");

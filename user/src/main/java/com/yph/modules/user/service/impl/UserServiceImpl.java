@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yph.enun.MqParameterEnum;
 import com.yph.modules.china.entity.ChinaEntity;
 import com.yph.modules.china.service.IChinaService;
 import com.yph.modules.user.entity.UserEntity;
@@ -11,6 +12,7 @@ import com.yph.modules.user.mapper.UserMapper;
 import com.yph.modules.user.service.IUserService;
 import com.yph.modules.user.template.SmsTemplate;
 import com.yph.util.BigDecimalUtil;
+import com.yph.util.MqUtil;
 import com.yph.util.P;
 import com.yph.util.R;
 import com.yph.util.utli.JwtUtil;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -43,6 +46,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
     @Autowired
     private IChinaService chinaService;
+
+    @Autowired
+    private MqUtil mqUtill;
+
+
 
 
     //用户等级升级  降级
@@ -70,20 +78,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
         //判断升级的用户
         for (UserEntity userEntity : userEntities) {
-            if(userEntity.getUserLevel()==0&&userEntity.getSumTeamEnergySource()>=20000000){
+            if(userEntity.getUserLevel()==0&&userEntity.getSumTeamEnergySource()>=20000000&&userEntity.getLifeSource()>100){
                 list1.add(userEntity.getUserId());
-            }else if(userEntity.getUserLevel()==1&&userEntity.getSumTeamEnergySource()>=50000000){
+            }else if(userEntity.getUserLevel()==1&&userEntity.getSumTeamEnergySource()>=50000000&&userEntity.getLifeSource()>100){
                 list2.add(userEntity.getUserId());
-            }else if(userEntity.getUserLevel()==2&&userEntity.getSumTeamEnergySource()>=200000000){
+            }else if(userEntity.getUserLevel()==2&&userEntity.getSumTeamEnergySource()>=200000000&&userEntity.getLifeSource()>100){
                 list3.add(userEntity.getUserId());
                 userEntities3.add(userEntity);
-            }else if(userEntity.getUserLevel()==3&&userEntity.getSumTeamEnergySource()>=500000000){
+            }else if(userEntity.getUserLevel()==3&&userEntity.getSumTeamEnergySource()>=500000000&&userEntity.getLifeSource()>100){
                 list4.add(userEntity.getUserId());
                 userEntities4.add(userEntity);
-            }else if(userEntity.getUserLevel()==4&&userEntity.getSumTeamEnergySource()>=1500000000){
+            }else if(userEntity.getUserLevel()==4&&userEntity.getSumTeamEnergySource()>=1500000000&&userEntity.getLifeSource()>100){
                 list5.add(userEntity.getUserId());
                 userEntities5.add(userEntity);
-            }else if(userEntity.getUserLevel()==5&&userEntity.getSumTeamEnergySource()>=5000000000L){
+            }else if(userEntity.getUserLevel()==5&&userEntity.getSumTeamEnergySource()>=5000000000L&&userEntity.getLifeSource()>100){
                 list6.add(userEntity.getUserId());
                 userEntities6.add(userEntity);
             }else{
@@ -298,6 +306,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
                 }
             }
         }
+
+
 
 
 
@@ -518,7 +528,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
                 updateWrapper.set("rank",rank);
                 updateWrapper.set("zone_code",chinaEntity.getId());
                 updateWrapper.set("zone_name",chinaEntity.getName());
-                update(updateWrapper);
+                updateWrapper.eq("user_id",userId);
+                try {
+                    update(updateWrapper);
+                }catch (Exception e){
+
+                }
                 return R.success();
             }else{
                 return R.error("上级无省代理，不可直接添加市区代理");
@@ -531,7 +546,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
             List<ChinaEntity> list = chinaService.list(queryWrapper1);
             boolean temp=false;
             for (ChinaEntity entity : list) {
-                if(entity.getId()==zoneCode){
+                if(entity.getId().intValue()==zoneCode.intValue()){
                     temp=true;
                     break;
                 }
@@ -544,7 +559,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
             updateWrapper.set("rank",rank);
             updateWrapper.set("zone_code",chinaEntity.getId());
             updateWrapper.set("zone_name",chinaEntity.getName());
-            update(updateWrapper);
+            updateWrapper.eq("user_id",userId);
+            try {
+                update(updateWrapper);
+            }catch (Exception e){
+                if(e instanceof DuplicateKeyException){
+                    //手机号冲突，已经注册
+                    return R.error("此区域的代理已经被人拿走了");
+                }
+            }
             return R.success();
         }
     }
@@ -564,8 +587,164 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         updateWrapper.setSql("life_source=life_source+"+size);
         updateWrapper.eq("user_id",userId);
         update(updateWrapper);
+        Map<String,Object> map=new HashMap<>();
+        map.put("toUserId",userId);
+        map.put("energySource",size);
+        map.put("marking",0);
+        mqUtill.testSend(MqParameterEnum.TeamEnergySumQueue.getExchangeName(),MqParameterEnum.TeamEnergySumQueue.getExchangeKeyName(),map);
+        return R.success();
+    }
+
+    @Override
+    public R selectSumLifeSource(P p) {
+        //生命源
         Integer lifeSourceSize=userMapper.selectSumLifeSource();
-        return R.success().data(lifeSourceSize);
+        BigDecimal bigDecimal = BigDecimalUtil.divide100(lifeSourceSize);
+
+        Integer energySourceSize = userMapper.selectSumEnergySource();
+        BigDecimal bigDecimal2 = BigDecimalUtil.divide100(energySourceSize);
+        Map<String,Integer> map=new HashMap<>();
+        map.put("lifeSourceSize",bigDecimal.intValue());
+        map.put("energySourceSize",bigDecimal2.intValue());
+        return R.success().data(map);
+    }
+
+    //生命源转为能量源
+    @Transactional
+    @Override
+    public R lifeSourceToEnergySource(P p) {
+        String lifeSource = p.getString("lifeSource");
+        String userId = p.getString("userId");
+        UpdateWrapper<UserEntity> updateWrapper=new UpdateWrapper<>();
+        BigDecimal temp=new BigDecimal(lifeSource);
+        BigDecimal multiply = temp.multiply(new BigDecimal("10"));
+        updateWrapper.setSql("life_source=life_source-"+BigDecimalUtil.multiply100(lifeSource).doubleValue()+",energySource=energySource"+BigDecimalUtil.multiply100(multiply.toString()).doubleValue());
+        updateWrapper.eq("user_id",userId);
+        updateWrapper.and(new Consumer<UpdateWrapper<UserEntity>>() {
+            @Override
+            public void accept(UpdateWrapper<UserEntity> userEntityUpdateWrapper) {
+                userEntityUpdateWrapper.le("life_source-"+BigDecimalUtil.multiply100(lifeSource).doubleValue(),0);
+            }
+        });
+        boolean update = update(updateWrapper);
+        if(update){
+            Map<String,Object> map=new HashMap<>();
+            map.put("toUserId",userId);
+            map.put("energySource",lifeSource);
+            map.put("marking",1);
+            mqUtill.testSend(MqParameterEnum.TeamEnergySumQueue.getExchangeName(),MqParameterEnum.TeamEnergySumQueue.getExchangeKeyName(),map);
+        }
+        return R.success().data(update);
+    }
+
+    //能量源转为币
+    @Override
+    public R energySourceToBean(P p) {
+        String energySource = p.getString("energySource");
+        String userId = p.getString("userId");
+        UpdateWrapper<UserEntity> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.setSql("energySource=energySource-"+BigDecimalUtil.multiply100(energySource)+",bean=bean"+BigDecimalUtil.multiply100(energySource));
+        updateWrapper.eq("user_id",userId);
+        updateWrapper.and(new Consumer<UpdateWrapper<UserEntity>>() {
+            @Override
+            public void accept(UpdateWrapper<UserEntity> userEntityUpdateWrapper) {
+                userEntityUpdateWrapper.le("energySource-"+BigDecimalUtil.multiply100(energySource).doubleValue(),0);
+            }
+        });
+        boolean update = update(updateWrapper);
+        return R.success().data(update);
+    }
+
+    //能量源转为生命源
+    @Override
+    public R energySourceToLifeSource(P p) {
+        String energySource = p.getString("energySource");
+        String userId = p.getString("userId");
+        UpdateWrapper<UserEntity> updateWrapper=new UpdateWrapper<>();
+        BigDecimal temp=new BigDecimal(energySource);
+        BigDecimal multiply = temp.divide(new BigDecimal("10"));
+        updateWrapper.setSql("energySource=energySource-"+BigDecimalUtil.multiply100(energySource).doubleValue()+",lifeSource=lifeSource"+BigDecimalUtil.multiply100(multiply.toString()).doubleValue());
+        updateWrapper.eq("user_id",userId);
+        updateWrapper.and(new Consumer<UpdateWrapper<UserEntity>>() {
+            @Override
+            public void accept(UpdateWrapper<UserEntity> userEntityUpdateWrapper) {
+                userEntityUpdateWrapper.le("energySource-"+BigDecimalUtil.multiply100(energySource).doubleValue(),0);
+            }
+        });
+        boolean update = update(updateWrapper);
+        if(update){
+            Map<String,Object> map=new HashMap<>();
+            map.put("toUserId",userId);
+            map.put("energySource",multiply.toString());
+            map.put("marking",0);
+            mqUtill.testSend(MqParameterEnum.TeamEnergySumQueue.getExchangeName(),MqParameterEnum.TeamEnergySumQueue.getExchangeKeyName(),map);
+        }
+        return R.success().data(update);
+    }
+
+    //币转为能量源
+    @Override
+    public R beanToEnergySource(P p) {
+        String bean = p.getString("bean");
+        String userId = p.getString("userId");
+        UpdateWrapper<UserEntity> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.setSql("bean=bean-"+BigDecimalUtil.multiply100(bean).doubleValue()+",energySource=energySource"+BigDecimalUtil.multiply100(bean).doubleValue());
+        updateWrapper.eq("user_id",userId);
+        updateWrapper.and(new Consumer<UpdateWrapper<UserEntity>>() {
+            @Override
+            public void accept(UpdateWrapper<UserEntity> userEntityUpdateWrapper) {
+                userEntityUpdateWrapper.le("bean-"+BigDecimalUtil.multiply100(bean).doubleValue(),0);
+            }
+        });
+        boolean update = update(updateWrapper);
+        return R.success().data(update);
+    }
+
+    //生命源互转
+    @Transactional
+    @Override
+    public R lifeSourceToLifeSource(P p) {
+        boolean temp=false;
+        Integer userId = p.getInt("userId");
+        Integer toUserId = p.getInt("toUserId");
+        String phone = p.getString("toPhone");
+        String size = p.getString("size");
+        String size100=BigDecimalUtil.multiply100(size).toString();
+        UpdateWrapper<UserEntity> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.setSql("lifeSource=lifeSource-"+size100);
+        updateWrapper.eq("userId",userId);
+        String finalSize = size100;
+        updateWrapper.and(new Consumer<UpdateWrapper<UserEntity>>() {
+            @Override
+            public void accept(UpdateWrapper<UserEntity> userEntityUpdateWrapper) {
+                userEntityUpdateWrapper.le("lifeSource-"+ finalSize,0);
+            }
+        });
+        boolean update = update(updateWrapper);
+
+
+        UpdateWrapper<UserEntity> updateWrapperToUserId=new UpdateWrapper<>();
+        updateWrapperToUserId.setSql("lifeSource=lifeSource+"+size100);
+        if (toUserId!=null){
+            updateWrapperToUserId.eq("userId",userId);
+            temp=update(updateWrapperToUserId);
+        }else if(phone!=null){
+            updateWrapperToUserId.eq("userId",userId);
+            temp=update(updateWrapperToUserId);
+        }
+        if(update&&temp){
+            Map<String,Object> map=new HashMap<>();
+            map.put("toUserId",userId);
+            map.put("energySource",size);
+            map.put("marking",1);
+            mqUtill.testSend(MqParameterEnum.TeamEnergySumQueue.getExchangeName(),MqParameterEnum.TeamEnergySumQueue.getExchangeKeyName(),map);
+            Map<String,Object> map2=new HashMap<>();
+            map2.put("toUserId",toUserId);
+            map2.put("energySource",size);
+            map2.put("marking",0);
+            mqUtill.testSend(MqParameterEnum.TeamEnergySumQueue.getExchangeName(),MqParameterEnum.TeamEnergySumQueue.getExchangeKeyName(),map2);
+        }
+        return R.success();
     }
 
     @Override
@@ -603,7 +782,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         String phone = p.getString("phone");
         String password = p.getString("password");
         String code = p.getString("code");
-        Integer inviterId = p.getInt("inviterId");
+
+        String temp = p.getString("inviterId");
+        QueryWrapper<UserEntity> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("user_mobile",temp);
+        UserEntity userEntity1 = userMapper.selectOne(queryWrapper);
+        Integer inviterId=userEntity1.getUserId();
         UserEntity userEntityNew=new UserEntity();
         String verify = smsTemplate.verify(phone, code);
         if(!verify.equals("OK")){

@@ -11,4 +11,7 @@
     <select id="selectSumLifeSource" resultType="java.lang.Integer">
         select sum(life_source) from `user`
     </select>
+    <select id="selectSumEnergySource" resultType="java.lang.Integer">
+        select sum(energy_source) from `user`
+    </select>
 </mapper>
