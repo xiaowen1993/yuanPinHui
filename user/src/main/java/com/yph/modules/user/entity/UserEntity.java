@@ -1,10 +1,11 @@
 package com.yph.modules.user.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -163,6 +164,58 @@ public class UserEntity implements Serializable {
      */
     private String zoneName;
 
+    /**
+     * 是否为冻结奖励 0：未冻结  1：已冻结
+     */
+    private Integer isFreezeAward;
+
+
+    /**
+     * 是否冻结提现 0未冻结  1已冻结
+     */
+    private Integer isFreezeWithdrawDeposit;
+
+    /**
+     * 是否冻结释放 0未冻结 1已冻结
+     */
+    private Integer isFreezeRelease;
+
+    /**
+     * 是否锁定用户 0未锁定 1已锁定
+     */
+    private Integer isLockTheUser;
+
+    public Integer getIsFreezeAward() {
+        return isFreezeAward;
+    }
+
+    public void setIsFreezeAward(Integer isFreezeAward) {
+        this.isFreezeAward = isFreezeAward;
+    }
+
+    public Integer getIsFreezeWithdrawDeposit() {
+        return isFreezeWithdrawDeposit;
+    }
+
+    public void setIsFreezeWithdrawDeposit(Integer isFreezeWithdrawDeposit) {
+        this.isFreezeWithdrawDeposit = isFreezeWithdrawDeposit;
+    }
+
+    public Integer getIsFreezeRelease() {
+        return isFreezeRelease;
+    }
+
+    public void setIsFreezeRelease(Integer isFreezeRelease) {
+        this.isFreezeRelease = isFreezeRelease;
+    }
+
+    public Integer getIsLockTheUser() {
+        return isLockTheUser;
+    }
+
+    public void setIsLockTheUser(Integer isLockTheUser) {
+        this.isLockTheUser = isLockTheUser;
+    }
 
     public Integer getIsAdmin() {
         return isAdmin;
@@ -224,6 +277,14 @@ public class UserEntity implements Serializable {
                 ", freezeBean=" + freezeBean +
                 ", sumEnergySource=" + sumEnergySource +
                 ", sumTeamEnergySource=" + sumTeamEnergySource +
+                ", isAdmin=" + isAdmin +
+                ", rank=" + rank +
+                ", zoneCode=" + zoneCode +
+                ", zoneName='" + zoneName + '\'' +
+                ", isFreezeAward=" + isFreezeAward +
+                ", isFreezeWithdrawDeposit=" + isFreezeWithdrawDeposit +
+                ", isFreezeRelease=" + isFreezeRelease +
+                ", isLockTheUser=" + isLockTheUser +
                 '}';
     }
 

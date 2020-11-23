@@ -1,4 +1,4 @@
-package com.yph.modules.system.controller;
+package com.yph.modules.system.controller.menu;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

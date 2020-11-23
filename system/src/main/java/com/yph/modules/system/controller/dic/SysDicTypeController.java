@@ -1,13 +1,11 @@
-package com.yph.modules.system.controller;
+package com.yph.modules.system.controller.dic;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yph.annotation.Pmap;
 import com.yph.modules.system.entity.AdminEntity;
-import com.yph.modules.system.entity.SysDictEntity;
 import com.yph.modules.system.entity.SysDictTypeEntity;
-import com.yph.modules.system.service.SysDictService;
 import com.yph.modules.system.service.SysDictTypeService;
 import com.yph.param.RedisParamenter;
 import com.yph.redis.service.RedisService;

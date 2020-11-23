@@ -1,4 +1,4 @@
-package com.yph.modules.system.controller;
+package com.yph.modules.system.controller.dept;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -8,7 +8,6 @@ import com.mysql.cj.util.StringUtils;
 import com.yph.annotation.Pmap;
 import com.yph.modules.system.entity.AdminEntity;
 import com.yph.modules.system.entity.SysDeptEntity;
-import com.yph.modules.system.service.AdminService;
 import com.yph.modules.system.service.SysDeptService;
 import com.yph.param.RedisParamenter;
 import com.yph.redis.service.RedisService;
@@ -18,9 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>
