@@ -58,36 +58,27 @@ public class JurisdictionAspect {
                 p = (P) proceedingJoinPoint.getArgs()[i];
             }
         }
-        if (p==null){
-            return R.error("p为空");
-        }
         if (p.getCookieValue(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY) == null) {
             return R.error("cookie为空");
         }
         Map<ElementType, List<RequestMapping>> annotations = AnnotationUtils.findAnnotations(method, RequestMapping.class);
-        if (annotations == null) {
-            return R.error("缺少必要信息");
-        }
         String uri = getUri(annotations);
-        System.out.println(uri);
         AdminEntity adminEntity = redisService.get(p.getCookieValue(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY), AdminEntity.class);
-
         if (jurisdiction.jurisdictionNumber().getCont().equals(JurisdictionEnum.JURISDICTION_ADMIN.getCont())){
             if (adminEntity.getAdminLevel().equals(JurisdictionEnum.JURISDICTION_ADMIN.getCode()+"")){
                 return proceedingJoinPoint.proceed(proceedingJoinPoint.getArgs());
             }
         }
-
         List list = redisService.get(AdminRoleEnum.ADMIN_ROLE_REDIS + adminEntity.getAdminName(), List.class);
         if (list==null){
-            return R.error("无权限");
+            return R.error("NOT_JURISDICTION");
         }
         for (Object o : list) {
             if (o.toString().equals(uri)){
                 return proceedingJoinPoint.proceed(proceedingJoinPoint.getArgs());
             }
         }
-        return R.error("无权限");
+        return R.error("NOT_JURISDICTION");
     }
 
 

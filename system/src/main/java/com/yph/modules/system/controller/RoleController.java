@@ -110,6 +110,14 @@ public class RoleController {
     }
 
 
+    @RequestMapping(value = "/getAdminIdByRole",method = RequestMethod.GET)
+    public R getAdminIdByRole(@Pmap P p){
+        AdminEntity adminEntity = redisService.get(p.getCookieValue(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY), AdminEntity.class);
+        List<SysAdminRoleEntity> list = sysAdminRoleService.list(new QueryWrapper<SysAdminRoleEntity>().eq("admin_id", adminEntity.getAdminId()));
+        return R.success().data(list);
+    }
+
+
     /**
      * admin分配角色
      * @return
@@ -142,9 +150,13 @@ public class RoleController {
         sysAdminRoleService.saveBatch(list);
         return R.success();
     }
-    
 
 
+    @RequestMapping(value = "/getRoleIdByMenu",method = RequestMethod.GET)
+    public R getRoleIdByMenu(@Pmap P p){
+        List<SysRoleMenuEntity> list = sysRoleMenuService.list(new QueryWrapper<SysRoleMenuEntity>().eq("role_id",p.getString("roleId")));
+        return R.success().data(list);
+    }
 
     /**
      * 角色分配权限

@@ -1,8 +1,10 @@
 package com.yph.modules.user.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yph.annotation.PassToken;
 import com.yph.annotation.Pmap;
+import com.yph.modules.user.entity.UserEntity;
 import com.yph.modules.user.execute.LifeSourceExecute;
 import com.yph.modules.user.service.IUserService;
 import com.yph.util.P;
@@ -12,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -153,6 +159,27 @@ public class UserController {
         return R.success();
     }
 
+
+    @RequestMapping("/getRankAndZoneCode")
+    @PassToken
+    public R getRankAndZoneCode(@Pmap P p){
+        Map<String,Object> map=new HashMap<>();
+        List<UserEntity> rank=userService.list(new QueryWrapper<UserEntity>().select("rank").isNotNull("zone_code").groupBy("rank"));
+        for (UserEntity userEntity : rank) {
+            List<UserEntity> list=userService.list(new QueryWrapper<UserEntity>().select("rank","zone_code").isNotNull("zone_code").eq("rank",userEntity.getRank()));
+            map.put(userEntity.getRank().toString(),list);
+        }
+        return R.success().data(map);
+    }
+
+
+    @RequestMapping("/isAdmin")
+    @PassToken
+    public R isAdmin(@Pmap P p){
+        QueryWrapper<UserEntity> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("is_admin",1);
+        return R.success().data(userService.list(queryWrapper));
+    }
 
 
 }
