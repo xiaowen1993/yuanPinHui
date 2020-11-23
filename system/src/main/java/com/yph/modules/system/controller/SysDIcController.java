@@ -3,11 +3,15 @@ package com.yph.modules.system.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.injector.methods.UpdateById;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yph.annotation.Pmap;
+import com.yph.modules.system.entity.AdminEntity;
 import com.yph.modules.system.entity.SysConfigEntity;
 import com.yph.modules.system.entity.SysDictEntity;
 import com.yph.modules.system.service.SysDictService;
+import com.yph.param.RedisParamenter;
+import com.yph.redis.service.RedisService;
 import com.yph.util.P;
 import com.yph.util.R;
 import org.bouncycastle.pqc.crypto.newhope.NHOtherInfoGenerator;
@@ -15,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 /**
  *字典
@@ -27,6 +33,10 @@ public class SysDIcController {
 
     @Autowired
     private SysDictService dictService;
+
+    @Autowired
+    RedisService redisService;
+
 
     /**
      * 查询字典
@@ -61,7 +71,8 @@ public class SysDIcController {
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     public R update(@Pmap P p) throws Exception {
         SysDictEntity sysDictEntity = p.thisToEntity(SysDictEntity.class);
-        return R.success("success",dictService.updateById(sysDictEntity));
+        sysDictEntity.setUpdateTime(new Date());
+        return R.success("success", dictService.updateById(sysDictEntity));
     }
     /**
      * 增加字典
@@ -74,6 +85,11 @@ public class SysDIcController {
         }else {
             p.put("status",1);
         }
+        AdminEntity adminEntity = redisService.get(p.getCookieValue(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY), AdminEntity.class);
+        sysDictEntity.setCreateUser(adminEntity.getAdminId());
+        sysDictEntity.setUpdateUser(adminEntity.getAdminId());
+        sysDictEntity.setCreateTime(new Date());
+        sysDictEntity.setUpdateTime(new Date());
         return R.success("success",dictService.save(sysDictEntity));
     }
 

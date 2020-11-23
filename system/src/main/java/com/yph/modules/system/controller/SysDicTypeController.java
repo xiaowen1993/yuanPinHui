@@ -4,10 +4,13 @@ package com.yph.modules.system.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yph.annotation.Pmap;
+import com.yph.modules.system.entity.AdminEntity;
 import com.yph.modules.system.entity.SysDictEntity;
 import com.yph.modules.system.entity.SysDictTypeEntity;
 import com.yph.modules.system.service.SysDictService;
 import com.yph.modules.system.service.SysDictTypeService;
+import com.yph.param.RedisParamenter;
+import com.yph.redis.service.RedisService;
 import com.yph.util.P;
 import com.yph.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ public class SysDicTypeController {
     @Autowired
     private SysDictTypeService dictTypeService;
 
+
+    @Autowired
+    RedisService redisService;
     /**
      * 查询字典类型
      * @param p
@@ -68,6 +74,14 @@ public class SysDicTypeController {
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     public R save(@Pmap P p) throws Exception {
         SysDictTypeEntity sysDictTypeEntity = p.thisToEntity(SysDictTypeEntity.class);
+        AdminEntity adminEntity = redisService.get(p.getCookieValue(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY), AdminEntity.class);
+        sysDictTypeEntity.setCreateUser(adminEntity.getAdminId());
+        sysDictTypeEntity.setUpdateUser(adminEntity.getAdminId());
+        if (p.getInt("status").equals("on")){
+            p.put("status",0);
+        }else {
+            p.put("status",1);
+        }
         return R.success("success",dictTypeService.save(sysDictTypeEntity));
     }
 

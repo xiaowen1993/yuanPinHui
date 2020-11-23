@@ -19,6 +19,7 @@ public class TaskConfig {
 
     @Scheduled(cron = "0 0 0 * * ?")
     private void delRedisKeyTimer() {
+        System.out.println("定时器");
         lifeSourceExecute.LifeSourceToEnergy();
     }
 

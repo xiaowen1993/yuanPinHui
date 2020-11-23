@@ -8,4 +8,10 @@
     <select id="selectUserByReferrer" resultType="com.yph.modules.user.entity.UserEntity">
         select * from `user` where user_referrer=#{upgrade4Id}
     </select>
+    <select id="selectSumLifeSource" resultType="java.lang.Integer">
+        select sum(life_source) from `user`
+    </select>
+    <select id="selectSumEnergySource" resultType="java.lang.Integer">
+        select sum(energy_source) from `user`
+    </select>
 </mapper>

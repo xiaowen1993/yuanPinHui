@@ -30,6 +30,7 @@ public interface IUserService extends IService<UserEntity> {
 
     String selectUserById(Integer userId);
 
+
     R selectUserBySuperior(P p);
 
     R selectUserReferrerTo(P p);
@@ -39,4 +40,20 @@ public interface IUserService extends IService<UserEntity> {
     R selectUserReferrerTo(Integer userId);
 
     R addZoneCode(P p);
+
+    R getUserById(P p) throws Exception;
+
+    R addLifeSource(P p);
+
+    R selectSumLifeSource(P p);
+
+    R lifeSourceToEnergySource(P p);
+
+    R energySourceToBean(P p);
+
+    R energySourceToLifeSource(P p);
+
+    R beanToEnergySource(P p);
+
+    R lifeSourceToLifeSource(P p);
 }

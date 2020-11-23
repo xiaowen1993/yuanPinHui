@@ -3,7 +3,6 @@ package com.yph.modules.user.controller;
 
 import com.yph.annotation.PassToken;
 import com.yph.annotation.Pmap;
-import com.yph.modules.user.entity.UserEntity;
 import com.yph.modules.user.execute.LifeSourceExecute;
 import com.yph.modules.user.service.IUserService;
 import com.yph.util.P;
@@ -12,11 +11,7 @@ import com.yph.util.utli.ValidateUtli;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -45,6 +40,17 @@ public class UserController {
         return userService.sendNote(p);
     }
 
+
+    /**
+     * 查询用户信息
+     * @param p
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/selectUserById")
+    public R selectUserById(@Pmap P p) throws Exception {
+        return userService.getUserById(p);
+    }
 
     /**
      *  String phone  手机号
@@ -91,15 +97,62 @@ public class UserController {
     @PassToken
     @RequestMapping("/addZoneCode")
     public R addZoneCode(@Pmap P p) throws Exception {
-        ValidateUtli.validateParams(p,"zoneCode","rank");
+        ValidateUtli.validateParams(p,"zoneCode","rank","userId");
         return userService.addZoneCode(p);
     }
 
+
+    //生命源互转
+    @RequestMapping("/lifeSourceToLifeSource")
+    public R lifeSourceToLifeSource(@Pmap P p) throws Exception {
+        ValidateUtli.validateParams(p,"size");
+        return userService.lifeSourceToLifeSource(p);
+    }
+
+
+    //添加生命源
+    @RequestMapping("/addLifeSource")
+    public R addLifeSource(@Pmap P p) throws Exception {
+        ValidateUtli.validateParams(p,"size");
+        return userService.addLifeSource(p);
+    }
+
+    //生命源转为能量源
+    @RequestMapping("/lifeSourceToEnergySource")
+    public R lifeSourceToEnergySource(@Pmap P p) throws Exception {
+        ValidateUtli.validateParams(p,"lifeSource");
+        return userService.lifeSourceToEnergySource(p);
+    }
+
+
+    //能量源转为币
+    @RequestMapping("/energySourceToBean")
+    public R energySourceToBean(@Pmap P p) throws Exception {
+        ValidateUtli.validateParams(p,"energySource");
+        return userService.energySourceToBean(p);
+    }
+
+    //能量源转为生命源
+    @RequestMapping("/energySourceToLifeSource")
+    public R energySourceToLifeSource(@Pmap P p) throws Exception {
+        ValidateUtli.validateParams(p,"energySource");
+        return userService.energySourceToLifeSource(p);
+    }
+
+
+    //币转为能量源
+    @RequestMapping("/beanToEnergySource")
+    public R beanToEnergySource(@Pmap P p) throws Exception {
+        ValidateUtli.validateParams(p,"bean");
+        return userService.beanToEnergySource(p);
+    }
 
     @RequestMapping("/test")
     public R test(){
         lifeSourceExecute.LifeSourceToEnergy();
         return R.success();
     }
+
+
 
 }

@@ -1,10 +1,12 @@
 package com.yph.modules.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -50,6 +52,9 @@ public class SysDeptEntity implements Serializable {
      */
     private Integer sort;
 
+    @TableField(exist = false)
+    private List<SysDeptEntity> children;
+
     /**
      * 创建人
      */
@@ -69,22 +74,6 @@ public class SysDeptEntity implements Serializable {
      * 修改时间
      */
     private Date updateTime;
-
-    @Override
-    public String toString() {
-        return "SysDeptEntity{" +
-                "deptId=" + deptId +
-                ", pid=" + pid +
-                ", simpleName='" + simpleName + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", description='" + description + '\'' +
-                ", sort=" + sort +
-                ", createUser=" + createUser +
-                ", createTime=" + createTime +
-                ", updateUser=" + updateUser +
-                ", updateTime=" + updateTime +
-                '}';
-    }
 
     public Integer getDeptId() {
         return deptId;
@@ -164,5 +153,30 @@ public class SysDeptEntity implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public List<SysDeptEntity> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<SysDeptEntity> children) {
+        this.children = children;
+    }
+
+    @Override
+    public String toString() {
+        return "SysDeptEntity{" +
+                "deptId=" + deptId +
+                ", pid=" + pid +
+                ", simpleName='" + simpleName + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", description='" + description + '\'' +
+                ", sort=" + sort +
+                ", children=" + children +
+                ", createUser='" + createUser + '\'' +
+                ", createTime=" + createTime +
+                ", updateUser='" + updateUser + '\'' +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }

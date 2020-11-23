@@ -59,6 +59,14 @@ public class AllocationServiceImpl implements AllocationService {
             Map map = (Map) r.get("data");
             downList = map.get("userLevel") == null ? null : (ArrayList) map.get("userLevel");
             zonesList = map.get("zones") == null ? null : (ArrayList) map.get("zones");
+            System.out.println("上级");
+            for (UserEntity userEntity : downList) {
+                System.out.println(userEntity.getUserId());
+            }
+            System.out.println("省市代");
+            for (UserEntity userEntity : zonesList) {
+                System.out.println(userEntity.getUserId());
+            }
             //伞下
             down(userId, userLevel, energySource, downList);
             //省市代
@@ -97,6 +105,7 @@ public class AllocationServiceImpl implements AllocationService {
         if (map != null) {
             String zhiTui = map.get("zhiTui") == null ? null : (String) map.get("zhiTui");
             String jianTui = map.get("jianTui") == null ? null : (String) map.get("jianTui");
+            System.out.println("直推ID"+zhiTui+"间推ID"+jianTui);
             if (zhiTui != null) {
                 BigDecimal multiply = BigDecimalUtil.multiply(new BigDecimal(energySource.toString()), systemParameter.getDirectPush());
                 if (multiply.doubleValue() > 0) {
@@ -126,6 +135,9 @@ public class AllocationServiceImpl implements AllocationService {
     private  void down(Integer userId, Integer userLevel, Long energySource, List<UserEntity> listUser) {
         List<UserEntity>[] upMan = getUpMan(userId, userLevel, listUser);
         BigDecimal sumRate = new BigDecimal("0.00");
+        if (userLevel>=1){
+            sumRate = AllocationRate.getCase(userLevel).getRate();
+        }
         for (int i = 0; i < upMan.length; i++) {
             List<UserEntity> list = upMan[i];
             if (list == null) {
