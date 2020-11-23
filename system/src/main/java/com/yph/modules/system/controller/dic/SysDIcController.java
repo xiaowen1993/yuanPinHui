@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.injector.methods.UpdateById;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mysql.cj.util.StringUtils;
 import com.yph.annotation.Pmap;
 import com.yph.modules.system.entity.AdminEntity;
 import com.yph.modules.system.entity.SysConfigEntity;
@@ -49,7 +50,7 @@ public class SysDIcController {
         Page<SysDictEntity> objectPage = new Page<>(p.getInt("page"),p.getInt("limit"));
         p.removeByKey(p);
         Page<SysDictEntity> pageObject = dictService.page(objectPage,new QueryWrapper<SysDictEntity>()
-                .eq("name", p.getString("name"))
+                .eq(!StringUtils.isNullOrEmpty(p.getString("name")),"name", p.getString("name"))
         );
         return R.success("success",pageObject.getRecords()).set("count",pageObject.getTotal());
     }

@@ -3,6 +3,7 @@ package com.yph.modules.system.controller.category;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mysql.cj.util.StringUtils;
 import com.yph.annotation.Pmap;
 import com.yph.modules.system.entity.CategoryEntity;
 import com.yph.modules.system.service.CategoryService;
@@ -41,7 +42,7 @@ public class CategoryController {
         Page<CategoryEntity> objectPage = new Page<>(p.getInt("page"),p.getInt("limit"));
         p.removeByKey(p);
         Page<CategoryEntity> pageObject = categoryService.page(objectPage,new QueryWrapper<CategoryEntity>()
-                .eq("category_name", p.getString("categoryName"))
+                .eq(!StringUtils.isNullOrEmpty(p.getString("category_name")),"category_name", p.getString("categoryName"))
         );
         return R.success("success",pageObject.getRecords()).set("count",pageObject.getTotal());
     }

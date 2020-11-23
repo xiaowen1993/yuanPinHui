@@ -3,6 +3,7 @@ package com.yph.modules.system.controller.dic;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mysql.cj.util.StringUtils;
 import com.yph.annotation.Pmap;
 import com.yph.modules.system.entity.AdminEntity;
 import com.yph.modules.system.entity.SysDictTypeEntity;
@@ -42,7 +43,7 @@ public class SysDicTypeController {
         Page<SysDictTypeEntity> objectPage = new Page<>(p.getInt("page"),p.getInt("limit"));
         p.removeByKey(p);
         Page<SysDictTypeEntity> pageObject = dictTypeService.page(objectPage,new QueryWrapper<SysDictTypeEntity>()
-                .eq("name", p.getString("name"))
+                .eq(!StringUtils.isNullOrEmpty(p.getString("name")),"name", p.getString("name"))
         );
         return R.success("success",pageObject.getRecords()).set("count",pageObject.getTotal());
     }
