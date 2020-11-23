@@ -2,6 +2,8 @@ package com.yph.modules.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yph.modules.system.entity.NoticeEntity;
+import com.yph.util.P;
+import com.yph.util.R;
 
 /**
  * <p>
@@ -13,4 +15,11 @@ import com.yph.modules.system.entity.NoticeEntity;
  */
 public interface NoticeService extends IService<NoticeEntity> {
 
+    public R noticePage(P p);
+
+    public R noticeAdd(P p) throws Exception;
+
+    public R noticeEdit(P p) throws Exception;
+
+    public R editStateById(P p) throws Exception;
 }

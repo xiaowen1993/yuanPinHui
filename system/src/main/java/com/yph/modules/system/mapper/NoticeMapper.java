@@ -2,6 +2,8 @@ package com.yph.modules.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yph.modules.system.entity.NoticeEntity;
+import com.yph.util.P;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.yph.modules.system.entity.NoticeEntity;
  */
 public interface NoticeMapper extends BaseMapper<NoticeEntity> {
 
+    void editStateById(@Param("p") P p);
 }
