@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yph.constant.UserConstant;
 import com.yph.enun.MqParameterEnum;
 import com.yph.modules.china.entity.ChinaEntity;
 import com.yph.modules.china.service.IChinaService;
@@ -11,6 +12,8 @@ import com.yph.modules.user.entity.UserEntity;
 import com.yph.modules.user.mapper.UserMapper;
 import com.yph.modules.user.service.IUserService;
 import com.yph.modules.user.template.SmsTemplate;
+import com.yph.modules.user.utli.MaxUtli;
+import com.yph.redis.service.RedisService;
 import com.yph.util.BigDecimalUtil;
 import com.yph.util.MqUtil;
 import com.yph.util.P;
@@ -49,6 +52,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
     @Autowired
     private MqUtil mqUtill;
+
+
+    @Autowired
+    RedisService redisService;
+
+
+    @Autowired
+    MaxUtli maxUtli;
 
 
 
@@ -581,12 +592,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     @Override
     public R addLifeSource(P p) {
         Integer size = p.getInt("size");
+        if(maxUtli.isMaxLifeSource(p.getString("size"))){
+            return R.error("系统生命源已经达到上限");
+        }
         size = BigDecimalUtil.multiply100(size).intValue();
         String userId = p.getString("userId");
         UpdateWrapper<UserEntity> updateWrapper=new UpdateWrapper<>();
         updateWrapper.setSql("life_source=life_source+"+size);
         updateWrapper.eq("user_id",userId);
         update(updateWrapper);
+        redisService.getValueOperations().increment(UserConstant.SYSTEM_SUM_LIFESOURCE,p.getInt("size"));
         Map<String,Object> map=new HashMap<>();
         map.put("toUserId",userId);
         map.put("energySource",size);
@@ -626,8 +641,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
                 userEntityUpdateWrapper.le("life_source-"+BigDecimalUtil.multiply100(lifeSource).doubleValue(),0);
             }
         });
+        if(maxUtli.isMaxEnergySource(multiply.toString())){
+            return R.error("系统能量源已经达到上限");
+        }
         boolean update = update(updateWrapper);
         if(update){
+            redisService.getValueOperations().decrement(UserConstant.SYSTEM_SUM_LIFESOURCE, p.getLong("lifeSource"));
+            redisService.getValueOperations().increment(UserConstant.SYSTEM_SUM_ENERGYSOURCE, multiply.longValue());
             Map<String,Object> map=new HashMap<>();
             map.put("toUserId",userId);
             map.put("energySource",lifeSource);
@@ -652,6 +672,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
             }
         });
         boolean update = update(updateWrapper);
+        if(update){
+            redisService.getValueOperations().decrement(UserConstant.SYSTEM_SUM_ENERGYSOURCE, p.getLong("energySource"));
+        }
         return R.success().data(update);
     }
 
@@ -671,8 +694,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
                 userEntityUpdateWrapper.le("energySource-"+BigDecimalUtil.multiply100(energySource).doubleValue(),0);
             }
         });
+        if(maxUtli.isMaxLifeSource(multiply.toString())){
+            return R.error("系统生命源已经达到上限");
+        }
         boolean update = update(updateWrapper);
         if(update){
+            redisService.getValueOperations().decrement(UserConstant.SYSTEM_SUM_ENERGYSOURCE, p.getLong("energySource"));
+            redisService.getValueOperations().increment(UserConstant.SYSTEM_SUM_LIFESOURCE, multiply.longValue());
             Map<String,Object> map=new HashMap<>();
             map.put("toUserId",userId);
             map.put("energySource",multiply.toString());
@@ -697,6 +725,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
             }
         });
         boolean update = update(updateWrapper);
+        if(maxUtli.isMaxEnergySource(bean)){
+            return R.error("系统能量源已经达到上限");
+        }
+        if(update){
+            redisService.getValueOperations().increment(UserConstant.SYSTEM_SUM_ENERGYSOURCE, p.getLong("bean"));
+        }
         return R.success().data(update);
     }
 
@@ -782,11 +816,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         String phone = p.getString("phone");
         String password = p.getString("password");
         String code = p.getString("code");
-
         String temp = p.getString("inviterId");
-        QueryWrapper<UserEntity> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("user_mobile",temp);
-        UserEntity userEntity1 = userMapper.selectOne(queryWrapper);
+//        QueryWrapper<UserEntity> queryWrapper=new QueryWrapper<>();
+//        queryWrapper.eq("user_mobile",temp);
+        UserEntity userEntity1 = userMapper.selectById(temp);
         Integer inviterId=userEntity1.getUserId();
         UserEntity userEntityNew=new UserEntity();
         String verify = smsTemplate.verify(phone, code);
@@ -895,7 +928,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
             return R.error("无此用户");
         }
         String jwt = JwtUtil.createJWT(UUID.randomUUID().toString(), JSON.toJSONString(userEntity.getUserId()));
-        userEntity.setUserId(null);
+//        userEntity.setUserId(null);
         return R.success().data(userEntity).set("token",jwt);
     }
 

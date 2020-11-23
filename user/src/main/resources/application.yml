@@ -77,9 +77,9 @@ mybatis-plus:
 
 aliyun:
   sms:
-    accessKeyId: LTAI4G2zskGKncipZhaMmGin
-    accessKeySecret: 1wlI0zmjPkw5OGEDQ2FlMkEVJRZd7P
-    signName: 手指拼
+    accessKeyId: LTAI4G66TD1rDrr8PEmTi7Df
+    accessKeySecret: 1T8C0clzNP0P6xXt9oVceIVQrBRmLf
+    signName: 源品购
     regionId: cn-hangzhou
     domain: dysmsapi.aliyuncs.com
     version: 2017-05-25

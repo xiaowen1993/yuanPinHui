@@ -8,6 +8,7 @@ import com.yph.enun.SystemParameter;
 import com.yph.modules.user.entity.UserEntity;
 import com.yph.modules.user.execute.LifeSourceExecute;
 import com.yph.modules.user.service.IUserService;
+import com.yph.redis.service.RedisService;
 import com.yph.util.MqUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,7 @@ public class SystemLifeSourceExecute implements LifeSourceExecute {
 
     @Autowired
     SystemParameter systemParameter;
+
 
     @Override
     public void LifeSourceToEnergy() {
@@ -55,6 +57,7 @@ public class SystemLifeSourceExecute implements LifeSourceExecute {
                 boolean update = userService.update(userEntityUpdateWrapper);
                 System.out.println("111");
                 if (update){
+
                     AllocationDto allocationDto = new AllocationDto(userEntity.getUserId(),energy.longValue(),userEntity.getUserLevel());
                     //发送给伞下分成处理
                     mqUtil.testSend(MqParameterEnum.AllocationQueue.getExchangeName(),MqParameterEnum.AllocationQueue.getExchangeKeyName(),allocationDto);

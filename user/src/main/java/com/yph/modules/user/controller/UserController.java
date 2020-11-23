@@ -107,6 +107,12 @@ public class UserController {
         return userService.addZoneCode(p);
     }
 
+    //查询系统中 总共生命源和能量源
+    @PassToken
+    @RequestMapping("/selectSumLifeSource")
+    public R selectSumLifeSource(@Pmap P p){
+        return userService.selectSumLifeSource(p);
+    }
 
     //生命源互转
     @RequestMapping("/lifeSourceToLifeSource")
@@ -152,6 +158,7 @@ public class UserController {
         ValidateUtli.validateParams(p,"bean");
         return userService.beanToEnergySource(p);
     }
+
 
     @RequestMapping("/test")
     public R test(){

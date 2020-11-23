@@ -13,4 +13,15 @@ public class UserConstant {
      */
     public static String SYSTEM_SMS="system_sms";
 
+
+    /**
+     * 系统中一共有多少能量源
+     */
+    public static String SYSTEM_SUM_ENERGYSOURCE="system_sum_energysource";
+
+    /**
+     * 系统中一共有多少生命源
+     */
+    public static String SYSTEM_SUM_LIFESOURCE="system_sum_lifesource";
+
 }
