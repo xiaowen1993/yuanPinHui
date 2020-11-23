@@ -36,7 +36,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, NoticeEntity> i
         Page<NoticeEntity> objectPage = new Page<>(p.getInt("page"),p.getInt("limit"));
         p.removeByKey(p);
         Page<NoticeEntity> pageObject = baseMapper.selectPage(objectPage,new QueryWrapper<NoticeEntity>()
-                .eq(!StringUtils.isNullOrEmpty(p.getString("title")),"simple_name", p.getString("title"))
+                .eq(!StringUtils.isNullOrEmpty(p.getString("title")),"title", p.getString("title"))
                 .eq(!StringUtils.isNullOrEmpty(p.getString("state")),"state", p.getString("state"))
                 .eq(!StringUtils.isNullOrEmpty(p.getString("format")),"format", p.getString("format"))
         );
