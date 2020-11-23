@@ -55,12 +55,12 @@ public class GoodsEntity implements Serializable {
     /**
      * 状态;1-已上架；2-已下架
      */
-    private String status;
+    private Integer status;
 
     /**
-     * 审核状态
+     * 审核状态;1-待审核，2-审核中，3-已审核
      */
-    private String approvalStatus;
+    private Integer approvalStatus;
 
     /**
      * 商品售价
@@ -135,7 +135,7 @@ public class GoodsEntity implements Serializable {
     /**
      * 是否包邮
      */
-    private String freeShipping;
+    private Integer freeShipping;
 
     /**
      * 浏览量
@@ -208,22 +208,27 @@ public class GoodsEntity implements Serializable {
         this.brandName = brandName;
         return this;
     }
-    public String getStatus() {
+
+    public Integer getStatus() {
         return status;
     }
 
-    public GoodsEntity setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
-        return this;
     }
-    public String getApprovalStatus() {
+
+    public Integer getApprovalStatus() {
         return approvalStatus;
     }
 
-    public GoodsEntity setApprovalStatus(String approvalStatus) {
+    public void setApprovalStatus(Integer approvalStatus) {
         this.approvalStatus = approvalStatus;
-        return this;
     }
+
+    public void setFreeShipping(Integer freeShipping) {
+        this.freeShipping = freeShipping;
+    }
+
     public String getSellingPrice() {
         return sellingPrice;
     }
@@ -336,14 +341,11 @@ public class GoodsEntity implements Serializable {
         this.weight = weight;
         return this;
     }
-    public String getFreeShipping() {
+
+    public Integer getFreeShipping() {
         return freeShipping;
     }
 
-    public GoodsEntity setFreeShipping(String freeShipping) {
-        this.freeShipping = freeShipping;
-        return this;
-    }
     public String getPageviews() {
         return pageviews;
     }
