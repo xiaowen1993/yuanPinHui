@@ -66,6 +66,11 @@ public class NoticeEntity implements Serializable {
     private Integer sort;
 
     /**
+     * 广告内容
+     */
+    private String content;
+
+    /**
      * 创建人
      */
     private String createUser;
@@ -165,6 +170,15 @@ public class NoticeEntity implements Serializable {
         this.sort = sort;
         return this;
     }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public String getCreateUser() {
         return createUser;
     }
@@ -211,6 +225,7 @@ public class NoticeEntity implements Serializable {
             ", endTime=" + endTime +
             ", clickRate=" + clickRate +
             ", sort=" + sort +
+            ", content=" + content +
             ", createUser=" + createUser +
             ", createTime=" + createTime +
             ", updateUser=" + updateUser +
