@@ -2,8 +2,10 @@ package com.yph.config;
 
 
 import com.yph.enun.MqParameterEnum;
-import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
@@ -47,6 +49,24 @@ public class MqConfig {
     public Binding binding() {
         //绑定一个队列  to: 绑定到哪个交换机上面 with：绑定的路由建（routingKey）
         return BindingBuilder.bind(queue()).to(defaultExchange()).with(MqParameterEnum.UserQueue.getExchangeKeyName());
+    }
+
+
+    @Bean
+    public DirectExchange txExchange() {
+        return new DirectExchange(MqParameterEnum.TxQueue.getExchangeName());
+    }
+
+    @Bean
+    public Queue txQueue() {
+        //名字  是否持久化
+        return new Queue(MqParameterEnum.TxQueue.getQueueName(), true);
+    }
+
+    @Bean
+    public Binding txBinding() {
+        //绑定一个队列  to: 绑定到哪个交换机上面 with：绑定的路由建（routingKey）
+        return BindingBuilder.bind(txQueue()).to(txExchange()).with(MqParameterEnum.TxQueue.getExchangeKeyName());
     }
 
 

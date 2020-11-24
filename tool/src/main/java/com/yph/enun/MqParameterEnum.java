@@ -14,7 +14,8 @@ public enum MqParameterEnum {
     UserQueue(MqParamter.USER_QUEUE_NAME, "direct.key", "userExchange"),
     AllocationQueue(MqParamter.ALLOCATION_QUEUE_NAME,"direct.key", "allocationExchange"),
     TeamEnergySumQueue(MqParamter.TEAM_ENERGY_SUM_QUEUE,"direct.key", "teamEnergySumExchange"),
-    LevelUp(MqParamter.LEVEL_UP_QUEUE,"direct.key", "levelExchange");
+    LevelUp(MqParamter.LEVEL_UP_QUEUE,"direct.key", "levelExchange"),
+    TxQueue(MqParamter.TX_QUEUE_NAME,"direct.key","txExchange");
 
 
     String queueName;

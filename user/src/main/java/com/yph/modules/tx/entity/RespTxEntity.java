@@ -1,11 +1,13 @@
 package com.yph.modules.tx.entity;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * <p>
@@ -26,142 +28,149 @@ public class RespTxEntity implements Serializable {
     /**
      * 交易的nonce
      */
-    private String nonce;
+    @TableField("nonce")
+    private String Nonce;
 
     /**
      * 交易的金额
      */
-    private BigDecimal amount;
+    @TableField("amount")
+    private BigDecimal Amount;
 
     /**
      * 交易发起地址
      */
-    private String from;
+    @TableField("from")
+    private String From;
 
     /**
      * 交易接受方地址
      */
-    private String to;
+    @TableField("to")
+    private String To;
 
     /**
      * 交易的hash
      */
-    private String hash;
+    @TableField("hash")
+    private String Hash;
 
     /**
      * 交易的签名
      */
-    private String signature;
+    @TableField("signature")
+    private String Signature;
 
     /**
      * 时间戳
      */
-    private Date time;
+    @TableField("time")
+    private Date Time;
 
     /**
      * 代币脚本
      */
-    private String script;
+    @TableField("script")
+    private String Script;
 
     /**
      * 关联的resp_block表主键
      */
     private Long respBlockId;
 
+    @Override
+    public String toString() {
+        return "RespTxEntity{" +
+                "id=" + id +
+                ", Nonce='" + Nonce + '\'' +
+                ", Amount=" + Amount +
+                ", From='" + From + '\'' +
+                ", To='" + To + '\'' +
+                ", Hash='" + Hash + '\'' +
+                ", Signature='" + Signature + '\'' +
+                ", Time=" + Time +
+                ", Script='" + Script + '\'' +
+                ", respBlockId=" + respBlockId +
+                '}';
+    }
+
     public Long getId() {
         return id;
     }
 
-    public RespTxEntity setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
-        return this;
     }
+
     public String getNonce() {
-        return nonce;
+        return Nonce;
     }
 
-    public RespTxEntity setNonce(String nonce) {
-        this.nonce = nonce;
-        return this;
+    public void setNonce(String nonce) {
+        Nonce = nonce;
     }
+
     public BigDecimal getAmount() {
-        return amount;
+        return Amount;
     }
 
-    public RespTxEntity setAmount(BigDecimal amount) {
-        this.amount = amount;
-        return this;
+    public void setAmount(BigDecimal amount) {
+        Amount = amount;
     }
+
     public String getFrom() {
-        return from;
+        return From;
     }
 
-    public RespTxEntity setFrom(String from) {
-        this.from = from;
-        return this;
+    public void setFrom(String from) {
+        From = from;
     }
+
     public String getTo() {
-        return to;
+        return To;
     }
 
-    public RespTxEntity setTo(String to) {
-        this.to = to;
-        return this;
+    public void setTo(String to) {
+        To = to;
     }
+
     public String getHash() {
-        return hash;
+        return Hash;
     }
 
-    public RespTxEntity setHash(String hash) {
-        this.hash = hash;
-        return this;
+    public void setHash(String hash) {
+        Hash = hash;
     }
+
     public String getSignature() {
-        return signature;
+        return Signature;
     }
 
-    public RespTxEntity setSignature(String signature) {
-        this.signature = signature;
-        return this;
+    public void setSignature(String signature) {
+        Signature = signature;
     }
+
     public Date getTime() {
-        return time;
+        return Time;
     }
 
-    public RespTxEntity setTime(Date time) {
-        this.time = time;
-        return this;
+    public void setTime(Date time) {
+        Time = time;
     }
+
     public String getScript() {
-        return script;
+        return Script;
     }
 
-    public RespTxEntity setScript(String script) {
-        this.script = script;
-        return this;
+    public void setScript(String script) {
+        Script = script;
     }
+
     public Long getRespBlockId() {
         return respBlockId;
     }
 
-    public RespTxEntity setRespBlockId(Long respBlockId) {
+    public void setRespBlockId(Long respBlockId) {
         this.respBlockId = respBlockId;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "RespTxEntity{" +
-            "id=" + id +
-            ", nonce=" + nonce +
-            ", amount=" + amount +
-            ", from=" + from +
-            ", to=" + to +
-            ", hash=" + hash +
-            ", signature=" + signature +
-            ", time=" + time +
-            ", script=" + script +
-            ", respBlockId=" + respBlockId +
-        "}";
     }
 }
