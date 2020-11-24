@@ -25,7 +25,7 @@ public class RespBlockEntity implements Serializable {
     /**
      * 区块号
      */
-    private String height;
+    private Long height;
 
     /**
      * 上一个区块的哈希值
@@ -65,11 +65,11 @@ public class RespBlockEntity implements Serializable {
         this.id = id;
         return this;
     }
-    public String getHeight() {
+    public Long getHeight() {
         return height;
     }
 
-    public RespBlockEntity setHeight(String height) {
+    public RespBlockEntity setHeight(Long height) {
         this.height = height;
         return this;
     }

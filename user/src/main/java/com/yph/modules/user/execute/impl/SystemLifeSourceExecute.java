@@ -2,12 +2,14 @@ package com.yph.modules.user.execute.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.yph.constant.UserConstant;
 import com.yph.entity.AllocationDto;
 import com.yph.enun.MqParameterEnum;
 import com.yph.enun.SystemParameter;
 import com.yph.modules.user.entity.UserEntity;
 import com.yph.modules.user.execute.LifeSourceExecute;
 import com.yph.modules.user.service.IUserService;
+import com.yph.param.RedisParamenter;
 import com.yph.redis.service.RedisService;
 import com.yph.util.MqUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Agu
@@ -32,6 +35,9 @@ public class SystemLifeSourceExecute implements LifeSourceExecute {
     @Autowired
     SystemParameter systemParameter;
 
+
+    @Autowired
+    RedisService redisService;
 
     @Override
     public void LifeSourceToEnergy() {
@@ -64,6 +70,24 @@ public class SystemLifeSourceExecute implements LifeSourceExecute {
                 }
             }
         }
+        before();
+    }
+
+
+    @Override
+    public void before() {
+        begin();
+
+
+        end();
+    }
+
+    public void begin(){
+        redisService.getValueOperations().set(UserConstant.SYSTEM_SYNC_ENERGY_SOURCE,"1",5, TimeUnit.MINUTES);
+    }
+
+    public  void end(){
+        redisService.remove(UserConstant.SYSTEM_SYNC_ENERGY_SOURCE);
     }
 
 }

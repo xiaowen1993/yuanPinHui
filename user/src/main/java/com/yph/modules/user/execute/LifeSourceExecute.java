@@ -9,5 +9,7 @@ public interface LifeSourceExecute {
     void LifeSourceToEnergy();
 
 
+    void  before();
+
 
 }

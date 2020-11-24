@@ -24,4 +24,8 @@ public class UserConstant {
      */
     public static String SYSTEM_SUM_LIFESOURCE="system_sum_lifesource";
 
+    /**
+     * 当前正在同步能量源标识
+     */
+    public static  String SYSTEM_SYNC_ENERGY_SOURCE="system_sync_energy_source";
 }
