@@ -7,10 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yph.annotation.Pmap;
 import com.yph.enun.AdminRoleEnum;
 import com.yph.modules.system.entity.*;
-import com.yph.modules.system.service.SysAdminRoleService;
-import com.yph.modules.system.service.SysMenuService;
-import com.yph.modules.system.service.SysRoleMenuService;
-import com.yph.modules.system.service.SysRoleService;
+import com.yph.modules.system.service.*;
 import com.yph.param.RedisParamenter;
 import com.yph.redis.service.RedisService;
 import com.yph.util.P;
@@ -39,6 +36,9 @@ public class RoleController {
 
     @Autowired
     SysRoleService sysRoleService;
+
+    @Autowired
+    AdminService adminService;
 
     @Autowired
     SysAdminRoleService sysAdminRoleService;
@@ -112,9 +112,14 @@ public class RoleController {
 
     @RequestMapping(value = "/getAdminIdByRole",method = RequestMethod.GET)
     public R getAdminIdByRole(@Pmap P p){
-        AdminEntity adminEntity = redisService.get(p.getCookieValue(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY), AdminEntity.class);
-        List<SysAdminRoleEntity> list = sysAdminRoleService.list(new QueryWrapper<SysAdminRoleEntity>().eq("admin_id", adminEntity.getAdminId()));
-        return R.success().data(list);
+        List<SysAdminRoleEntity> list = sysAdminRoleService.list(new QueryWrapper<SysAdminRoleEntity>().eq("admin_id", p.getString("adminId")));
+        List<String> role=new ArrayList<>();
+        if (list != null) {
+            for (SysAdminRoleEntity sysAdminRoleEntity : list) {
+                role.add(sysAdminRoleEntity.getRoleId().toString());
+            }
+        }
+        return R.success().data(role);
     }
 
 
@@ -125,14 +130,15 @@ public class RoleController {
     @RequestMapping(value = "/adminForRole",method = RequestMethod.POST)
     @Transactional
     public R adminForRole(@Pmap P p){
-        String[] ids = p.getStringArray("ids");
-        if (ids==null){
+        String idc=p.getString("ids");
+        if (idc==null){
             return R.error("至少选中一个角色");
         }
+        String[] ids = idc.split(",");
         List<SysAdminRoleEntity> list =new ArrayList<>();
         List<String> root=new ArrayList<>();
-
-        AdminEntity adminEntity = redisService.get(p.getCookieValue(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY), AdminEntity.class);
+        AdminEntity adminEntity = adminService.getOne(new QueryWrapper<AdminEntity>().eq("admin_id", p.getString("adminId")));
+//        AdminEntity adminEntity = redisService.get(p.getCookieValue(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY), AdminEntity.class);
         sysAdminRoleService.remove(new UpdateWrapper<SysAdminRoleEntity>().eq("admin_id",adminEntity.getAdminId()));
         for (String id : ids) {
             List<SysRoleMenuEntity> role_id = sysRoleMenuService.list(new QueryWrapper<SysRoleMenuEntity>().eq("role_id", id));
@@ -155,7 +161,13 @@ public class RoleController {
     @RequestMapping(value = "/getRoleIdByMenu",method = RequestMethod.GET)
     public R getRoleIdByMenu(@Pmap P p){
         List<SysRoleMenuEntity> list = sysRoleMenuService.list(new QueryWrapper<SysRoleMenuEntity>().eq("role_id",p.getString("roleId")));
-        return R.success().data(list);
+        List<String> menu=new ArrayList<>();
+        if (list!=null){
+            for (SysRoleMenuEntity sysRoleMenuEntity : list) {
+                menu.add(sysRoleMenuEntity.getMenuId().toString());
+            }
+        }
+        return R.success().data(menu);
     }
 
     /**
@@ -164,12 +176,13 @@ public class RoleController {
      * @return
      */
     @Transactional
-    @RequestMapping(value = "/roleForMenu",method = RequestMethod.POST)
+    @RequestMapping(value = "/roleForMenu")
     public R roleForMenu(@Pmap P p){
-        String[] menuIds = p.getStringArray("menuIds");
-        if (menuIds==null){
+        String menuId = p.getString("menuIds");
+        if (menuId==null){
             return R.error("至少选中一条");
         }
+        String[] menuIds=menuId.split(",");
         sysRoleMenuService.remove(new UpdateWrapper<SysRoleMenuEntity>().eq("role_id",p.getInt("roleId")));
         List<SysRoleMenuEntity> list=new ArrayList<>();
         for (String s:menuIds){

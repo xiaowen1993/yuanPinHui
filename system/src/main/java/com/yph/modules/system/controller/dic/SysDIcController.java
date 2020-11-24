@@ -3,19 +3,14 @@ package com.yph.modules.system.controller.dic;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.injector.methods.UpdateById;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mysql.cj.util.StringUtils;
 import com.yph.annotation.Pmap;
-import com.yph.modules.system.entity.AdminEntity;
-import com.yph.modules.system.entity.SysConfigEntity;
 import com.yph.modules.system.entity.SysDictEntity;
 import com.yph.modules.system.service.SysDictService;
-import com.yph.param.RedisParamenter;
 import com.yph.redis.service.RedisService;
 import com.yph.util.P;
 import com.yph.util.R;
-import org.bouncycastle.pqc.crypto.newhope.NHOtherInfoGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -86,9 +81,9 @@ public class SysDIcController {
         }else {
             p.put("status",1);
         }
-        AdminEntity adminEntity = redisService.get(p.getCookieValue(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY), AdminEntity.class);
-        sysDictEntity.setCreateUser(adminEntity.getAdminId());
-        sysDictEntity.setUpdateUser(adminEntity.getAdminId());
+//        AdminEntity adminEntity = redisService.get(p.getCookieValue(RedisParamenter.ADMIN_LOING_USER_REDIS_KEY), AdminEntity.class);
+//        sysDictEntity.setCreateUser(adminEntity.getAdminId());
+//        sysDictEntity.setUpdateUser(adminEntity.getAdminId());
         sysDictEntity.setCreateTime(new Date());
         sysDictEntity.setUpdateTime(new Date());
         return R.success("success",dictService.save(sysDictEntity));
