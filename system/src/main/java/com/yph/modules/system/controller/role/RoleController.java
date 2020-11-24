@@ -151,7 +151,6 @@ public class RoleController {
             sysAdminRoleEntity.setRoleId(Integer.parseInt(id));
             list.add(sysAdminRoleEntity);
         }
-        System.out.println(root.toString());
         redisService.set(AdminRoleEnum.ADMIN_ROLE_REDIS+adminEntity.getAdminName(),root);
         sysAdminRoleService.saveBatch(list);
         return R.success();
