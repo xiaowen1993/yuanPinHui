@@ -13,9 +13,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +29,6 @@ public class TxListener {
     IRespTxService respTxService;
 
     @RabbitListener(queues = MqParamter.TX_QUEUE_NAME)
-    @Transactional
     public  void listener(Message message, Channel channel) throws Exception{
         Map<String,Object> map = JSONUtils.toMap(new String(message.getBody()));
         P p=new P(map);

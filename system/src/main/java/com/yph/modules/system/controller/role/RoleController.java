@@ -13,7 +13,6 @@ import com.yph.redis.service.RedisService;
 import com.yph.util.P;
 import com.yph.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -128,7 +127,6 @@ public class RoleController {
      * @return
      */
     @RequestMapping(value = "/adminForRole",method = RequestMethod.POST)
-    @Transactional
     public R adminForRole(@Pmap P p){
         String idc=p.getString("ids");
         if (idc==null){
@@ -174,7 +172,6 @@ public class RoleController {
      * @param p
      * @return
      */
-    @Transactional
     @RequestMapping(value = "/roleForMenu")
     public R roleForMenu(@Pmap P p){
         String menuId = p.getString("menuIds");

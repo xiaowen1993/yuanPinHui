@@ -11,6 +11,7 @@ import com.yph.util.P;
 import com.yph.util.R;
 import com.yph.util.utli.ValidateUtli;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,12 @@ public class UserController {
 
     @Autowired
     IUserService userService;
+
+    @GetMapping("/address")
+    @PassToken
+    public R address(@Pmap P p){
+        return R.success().data(userService.list(new QueryWrapper<UserEntity>().eq("address",p.getString("address"))));
+    }
 
     /**
      *发送验证码

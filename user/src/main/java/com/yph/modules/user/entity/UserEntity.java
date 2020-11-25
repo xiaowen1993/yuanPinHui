@@ -185,6 +185,26 @@ public class UserEntity implements Serializable {
      */
     private Integer isLockTheUser;
 
+    private String address;
+
+    private String privkey;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPrivkey() {
+        return privkey;
+    }
+
+    public void setPrivkey(String privkey) {
+        this.privkey = privkey;
+    }
+
     public Integer getIsFreezeAward() {
         return isFreezeAward;
     }
